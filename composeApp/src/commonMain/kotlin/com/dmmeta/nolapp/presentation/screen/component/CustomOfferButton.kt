@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import nolapp.composeapp.generated.resources.Res
@@ -33,8 +32,10 @@ fun CustomOfferButton(
 
     Row(
         modifier = modifier
+            .padding(8.dp)
             .background(
-                color = Color(0xFFf7f8fb), shape = RoundedCornerShape(
+                color = MaterialTheme.colorScheme.outlineVariant.copy(.2f),
+                shape = RoundedCornerShape(
                     12.dp
                 )
             )
