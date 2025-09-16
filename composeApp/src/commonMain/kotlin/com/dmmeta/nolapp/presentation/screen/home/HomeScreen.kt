@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -48,7 +50,7 @@ import com.dmmeta.nolapp.presentation.screen.component.CustomOfferButton
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBar
 import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.nolapp.presentation.screen.component.PlayerBox
-import com.dmmeta.nolapp.presentation.screen.theme.TopContentBrush
+import com.dmmeta.nolapp.presentation.theme.TopContentBrush
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import nolapp.composeapp.generated.resources.Res
@@ -103,7 +105,11 @@ fun HomeScreen() {
 fun HomeContent() {
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TopContent()
-        Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .padding(8.dp)
+                .navigationBarsPadding()
+        ) {
             CategorySection()
             BannerSection()
             OfferButtonSection()
@@ -124,20 +130,21 @@ fun OfferButtonSection() {
         val itemPerRow = if (maxWidth >= wideBreakPoint) 4 else 2
 
         Column(modifier = Modifier.fillMaxWidth()) {
-            // break into rows
+
             list.chunked(itemPerRow).forEach { rowItems ->
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     rowItems.forEach { item ->
                         CustomOfferButton(
                             modifier = Modifier
-                                .weight(1f)
-                                .padding(8.dp),
+                                .weight(1f),
                             painter = item.icon,
                             offerText = item.name
                         )
                     }
 
-                    // If row is not full, add empty space to balance
                     repeat(itemPerRow - rowItems.size) {
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -148,7 +155,7 @@ fun OfferButtonSection() {
                 painterResource(Res.drawable.welcome_kit),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().padding(8.dp)
                     .clip(RoundedCornerShape(16.dp))
             )
         }
@@ -223,12 +230,11 @@ fun BannerSection() {
                 }
             }
         }
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
             HorizontalPager(
                 state = pagerState,
                 snapPosition = SnapPosition.Start,
                 modifier = Modifier.fillMaxWidth().height(150.dp),
-                contentPadding = PaddingValues(0.dp),
                 pageSize = PageSize.Fill,
             ) { page ->
 
@@ -246,14 +252,16 @@ fun BannerSection() {
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .padding(horizontal = 8.dp)
                     )
+
                 } else {
                     Row(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            .padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
@@ -261,13 +269,18 @@ fun BannerSection() {
                             contentDescription = null,
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier.weight(1f).fillMaxHeight()
+                                .clip(RoundedCornerShape(16.dp))
+
                         )
+                        Spacer(Modifier.width(8.dp))
                         if (painters.size > 1) {
                             Image(
                                 painter = painters[1],
                                 contentDescription = null,
                                 contentScale = ContentScale.FillBounds,
                                 modifier = Modifier.weight(1f).fillMaxHeight()
+                                    .clip(RoundedCornerShape(16.dp))
+
                             )
                         } else {
                             Spacer(Modifier.weight(1f))
@@ -374,7 +387,7 @@ fun CategorySection() {
             itemName = "고속버스",
             icon = painterResource(Res.drawable.speed_bus)
         ),
-        )
+    )
 
 
     val column = 5
@@ -385,8 +398,8 @@ fun CategorySection() {
     ) {
         itemList.chunked(column).forEach { row ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 row.forEach { item ->
                     Box(modifier = Modifier.weight(1f)) {

@@ -61,7 +61,7 @@ fun AppNavigation(navController: NavHostController) {
                 startDestination = Screen.Home
             ) {
                 composable<Screen.Home> {
-                  Box(modifier = Modifier){}
+                    HomeScreen()
                 }
             }
 

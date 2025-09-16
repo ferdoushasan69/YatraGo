@@ -1,4 +1,4 @@
-package com.dmmeta.nolapp.presentation.screen.theme
+package com.dmmeta.nolapp.presentation.theme
 
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color

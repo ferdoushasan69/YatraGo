@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -82,75 +85,91 @@ fun PlayerBox(
         return idx.coerceIn(0, count - 1)
     }
 
-    Row(
+    Box(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        contentAlignment = Alignment.Center
     ) {
-        IconButton(onTogglePlay) {
-            Icon(
-                painter = painterResource(if (playing) Res.drawable.ic_play else Res.drawable.ic_pause),
-                contentDescription = null
-            )
-        }
-
-        //CustomSlider
-        Box(
-            modifier = Modifier.weight(1f)
-                .height(16.dp)
-
-                .pointerInput(count, trackWidthPx) {
-                    detectTapGestures { offset ->
-                        onSeek(xToIndex(offset.x))
-                    }
-                }
-                .pointerInput(count, trackWidthPx) {
-                    detectDragGestures(
-                        onDragStart = {
-                            isDragging = true
-                            dragX = animX.value
-                        },
-                        onDrag = { change, dragAmount ->
-                            change.consume()
-                            dragX = (dragX + dragAmount.x)
-                                .coerceIn(0f, trackWidthPx.toFloat())
-                        },
-                        onDragEnd = {
-                            isDragging = false
-                            onSeek(xToIndex(dragX))
-                        },
-                        onDragCancel = { isDragging = false }
-                    )
-                },
-            contentAlignment = Alignment.CenterStart
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .widthIn(min = 250.dp, max = 500.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
+            IconButton(onTogglePlay) {
+                Icon(
+                    painter = painterResource(if (playing) Res.drawable.ic_play else Res.drawable.ic_pause),
+                    contentDescription = null
+                )
+            }
+
+            //CustomSlider
             Box(
-                modifier = Modifier.fillMaxWidth().height(2.dp).background(Color(0xFFE6E6E6))
-                    .onGloballyPositioned {
-                        trackWidthPx = it.size.width
+                modifier = Modifier.weight(1f)
+                    .height(16.dp)
+
+                    .pointerInput(count, trackWidthPx) {
+                        detectTapGestures { offset ->
+                            onSeek(xToIndex(offset.x))
+                        }
                     }
+                    .pointerInput(count, trackWidthPx) {
+                        detectDragGestures(
+                            onDragStart = {
+                                isDragging = true
+                                dragX = animX.value
+                            },
+                            onDrag = { change, dragAmount ->
+                                change.consume()
+                                dragX = (dragX + dragAmount.x)
+                                    .coerceIn(0f, trackWidthPx.toFloat())
+                            },
+                            onDragEnd = {
+                                isDragging = false
+                                onSeek(xToIndex(dragX))
+                            },
+                            onDragCancel = { isDragging = false }
+                        )
+                    },
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .height(2.dp)
+                        .background(Color(0xFFe6e7ea))
+                        .onGloballyPositioned {
+                            trackWidthPx = it.size.width
+                        }
+                )
+                val x = if (isDragging) dragX else animX.value
+
+                Box(
+                    modifier = Modifier
+                        .offset {
+                            IntOffset(x = (x - knobWidthPx / 2f).roundToInt(), 0)
+                        }
+                        .width(16.dp)
+                        .height(4.dp)
+                        .background(
+                            Color.Black,
+                            RoundedCornerShape(2.dp)
+                        )
+                )
+            }
+
+            Text(
+                text = "$currentPage / $pageSize",
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 8.dp)
             )
-            val x = if (isDragging) dragX else animX.value
 
-            Box(
-                modifier = Modifier
-                    .offset {
-                        IntOffset(x = (x - knobWidthPx / 2f).roundToInt(), 0)
-                    }
-                    .width(knobWidthDp)
-                    .height(4.dp)
-                    .background(Color.Black, RoundedCornerShape(2.dp))
-            )
+            IconButton(onClick = onNext) {
+                Icon(
+                    painterResource(Res.drawable.ic_add),
+                    contentDescription = null
+                )
+            }
+
         }
-
-        Text(
-            text = "$currentPage / $pageSize",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
-
-        IconButton(onClick = onNext) {
-            Icon(painterResource(Res.drawable.ic_add), contentDescription = null)
-        }
-
     }
 }
