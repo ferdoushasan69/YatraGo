@@ -10,7 +10,7 @@ sealed class Screen {
     object Home : Screen()
 
     @Serializable
-    object Category : Screen()
+    data class Category(val categoryName: String) : Screen()
 
     @Serializable
     object RoundMap : Screen()
