@@ -7,15 +7,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.toRoute
 import com.dmmeta.nolapp.presentation.screen.home.HomeScreen
 
 
@@ -61,7 +64,13 @@ fun AppNavigation(navController: NavHostController) {
                 startDestination = Screen.Home
             ) {
                 composable<Screen.Home> {
-                    HomeScreen()
+                    HomeScreen(navController)
+                }
+                composable<Screen.Category> {
+                    val name = it.toRoute<Screen.Category>()
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(name.categoryName)
+                    }
                 }
             }
 
