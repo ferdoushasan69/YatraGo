@@ -3,7 +3,6 @@ package com.dmmeta.nolapp.presentation.screen.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,12 +17,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,11 +27,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,31 +43,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.dmmeta.nolapp.presentation.navigation.Screen
+import com.dmmeta.nolapp.presentation.screen.component.BannerSection
 import com.dmmeta.nolapp.presentation.screen.component.CustomOfferButton
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBar
 import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
-import com.dmmeta.nolapp.presentation.screen.component.PlayerBox
 import com.dmmeta.nolapp.presentation.screen.component.ProductItem
 import com.dmmeta.nolapp.presentation.theme.TopContentBrush
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.dmmeta.nolapp.utils.wideBreakPoint
 import nolapp.composeapp.generated.resources.Res
-import nolapp.composeapp.generated.resources.banner_eight
-import nolapp.composeapp.generated.resources.banner_eleven
-import nolapp.composeapp.generated.resources.banner_fifteen
-import nolapp.composeapp.generated.resources.banner_five
-import nolapp.composeapp.generated.resources.banner_four
-import nolapp.composeapp.generated.resources.banner_fourteen
-import nolapp.composeapp.generated.resources.banner_nine
-import nolapp.composeapp.generated.resources.banner_one
-import nolapp.composeapp.generated.resources.banner_seven
-import nolapp.composeapp.generated.resources.banner_six
-import nolapp.composeapp.generated.resources.banner_sixteen
-import nolapp.composeapp.generated.resources.banner_ten
-import nolapp.composeapp.generated.resources.banner_thirteen
-import nolapp.composeapp.generated.resources.banner_three
-import nolapp.composeapp.generated.resources.banner_tweleve
-import nolapp.composeapp.generated.resources.banner_two
 import nolapp.composeapp.generated.resources.bus_transport
 import nolapp.composeapp.generated.resources.calander
 import nolapp.composeapp.generated.resources.camping
@@ -101,18 +76,21 @@ import nolapp.composeapp.generated.resources.welcome_kit
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-private val wideBreakPoint = 600.dp
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    HomeContent(onCategoryItemClick = {
-        navController.navigate(Screen.Category(it))
-    }
+    HomeContent(
+        onCategoryItemClick = {
+            navController.navigate(Screen.Category(it))
+        },
+        onBannerAddClick = {
+            navController.navigate(Screen.ViewAllBanner)
+        }
     )
 }
 
 @Composable
-fun HomeContent(onCategoryItemClick: (String) -> Unit) {
+fun HomeContent(onCategoryItemClick: (String) -> Unit, onBannerAddClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TopContent()
         Column(
@@ -121,7 +99,7 @@ fun HomeContent(onCategoryItemClick: (String) -> Unit) {
                 .navigationBarsPadding()
         ) {
             CategorySection(onCategoryItemClick = onCategoryItemClick)
-            BannerSection()
+            BannerSection(onClick = onBannerAddClick)
             OfferButtonSection()
             ProductItemSection()
         }
@@ -215,160 +193,6 @@ data class OfferButton(
     val name: String
 )
 
-@Composable
-fun BannerSection() {
-    val pagerItems = listOf(
-        painterResource(Res.drawable.banner_one),
-        painterResource(Res.drawable.banner_two),
-        painterResource(Res.drawable.banner_three),
-        painterResource(Res.drawable.banner_four),
-        painterResource(Res.drawable.banner_five),
-        painterResource(Res.drawable.banner_six),
-        painterResource(Res.drawable.banner_seven),
-        painterResource(Res.drawable.banner_eight),
-        painterResource(Res.drawable.banner_nine),
-        painterResource(Res.drawable.banner_ten),
-        painterResource(Res.drawable.banner_eleven),
-        painterResource(Res.drawable.banner_tweleve),
-        painterResource(Res.drawable.banner_thirteen),
-        painterResource(Res.drawable.banner_fourteen),
-        painterResource(Res.drawable.banner_fifteen),
-        painterResource(Res.drawable.banner_sixteen)
-    )
-
-
-
-    if (pagerItems.isEmpty()) return
-
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-
-        val itemPerPage = if (maxWidth >= wideBreakPoint) 2 else 1
-        val pageItem = remember(pagerItems, itemPerPage) {
-            pagerItems.chunked(itemPerPage)
-        }
-        val realCount = pageItem.size
-        if (realCount == 0) return@BoxWithConstraints
-
-
-        val loopCount = realCount + 2;
-        val pagerState = rememberPagerState(initialPage = 1, pageCount = {
-            loopCount
-        })
-
-
-        var isPlaying by remember { mutableStateOf(true) }
-        val scope = rememberCoroutineScope()
-        LaunchedEffect(isPlaying, pagerState.currentPage, realCount) {
-            if (!isPlaying) return@LaunchedEffect
-            delay(5000)
-            if (!pagerState.isScrollInProgress && pagerItems.isNotEmpty()) {
-                pagerState.requestScrollToPage(pagerState.currentPage + 1)
-            }
-        }
-        LaunchedEffect(pagerState.currentPage) {
-            val p = pagerState.currentPage
-            when (p) {
-                0 -> {
-                    pagerState.requestScrollToPage(realCount)
-                }
-
-                realCount + 1 -> {
-                    pagerState.requestScrollToPage(1)
-                }
-            }
-        }
-        Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-            HorizontalPager(
-                state = pagerState,
-                snapPosition = SnapPosition.Start,
-                modifier = Modifier.fillMaxWidth().height(150.dp),
-                pageSize = PageSize.Fill,
-            ) { page ->
-
-                val realIndex = when (page) {
-                    0 -> realCount - 1
-                    realCount + 1 -> 0
-                    else -> page - 1
-                }
-                val painters = pageItem[realIndex]
-
-                if (painters.size == 1) {
-                    Image(
-                        painter = painters[0],
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp))
-                            .padding(horizontal = 8.dp)
-                    )
-
-                } else {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painters[0],
-                            contentDescription = null,
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.weight(1f).fillMaxHeight()
-                                .clip(RoundedCornerShape(16.dp))
-
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        if (painters.size > 1) {
-                            Image(
-                                painter = painters[1],
-                                contentDescription = null,
-                                contentScale = ContentScale.FillBounds,
-                                modifier = Modifier.weight(1f).fillMaxHeight()
-                                    .clip(RoundedCornerShape(16.dp))
-
-                            )
-                        } else {
-                            Spacer(Modifier.weight(1f))
-                        }
-                    }
-                }
-
-            }
-
-            val effectiveIndex = ((pagerState.currentPage - 1) % realCount + realCount) % realCount
-            val displayPage = effectiveIndex + 1;
-            val pageSize = realCount
-
-            PlayerBox(
-                current = pagerState.currentPage - 1,
-                count = realCount,
-                playing = isPlaying,
-                onTogglePlay = {
-                    isPlaying = !isPlaying
-                },
-                onSeek = { index ->
-                    val target = (index + 1).coerceIn(1, realCount)
-                    scope.launch {
-                        pagerState.animateScrollToPage(target)
-                    }
-                },
-                onNext = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                    }
-                },
-                onPrev = {
-                    scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
-                },
-                currentPage = displayPage,
-                pageSize = pageSize
-            )
-        }
-    }
-
-}
 
 @Composable
 fun CategorySection(onCategoryItemClick: (String) -> Unit) {

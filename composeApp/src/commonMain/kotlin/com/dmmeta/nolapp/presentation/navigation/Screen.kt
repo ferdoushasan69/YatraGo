@@ -13,6 +13,9 @@ sealed class Screen {
     data class Category(val categoryName: String) : Screen()
 
     @Serializable
+    object ViewAllBanner : Screen()
+
+    @Serializable
     object RoundMap : Screen()
 
     @Serializable
