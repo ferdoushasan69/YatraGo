@@ -20,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.dmmeta.nolapp.presentation.screen.home.HomeScreen
+import com.dmmeta.nolapp.presentation.screen.view_all_banner.BannerListScreen
 
 
 @Composable
@@ -71,6 +72,10 @@ fun AppNavigation(navController: NavHostController) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(name.categoryName)
                     }
+                }
+
+                composable<Screen.ViewAllBanner> {
+                    BannerListScreen(navController)
                 }
             }
 

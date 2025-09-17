@@ -49,10 +49,9 @@ fun PlayerBox(
     playing: Boolean,
     onTogglePlay: () -> Unit,
     onSeek: (Int) -> Unit,
-    onNext: () -> Unit,
-    onPrev: () -> Unit,
     currentPage: Int,
-    pageSize: Int
+    pageSize: Int,
+    onAdd: () -> Unit
 ) {
     val density = LocalDensity.current
 
@@ -163,7 +162,7 @@ fun PlayerBox(
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
 
-            IconButton(onClick = onNext) {
+            IconButton(onClick = onAdd) {
                 Icon(
                     painterResource(Res.drawable.ic_add),
                     contentDescription = null
