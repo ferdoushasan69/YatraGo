@@ -35,7 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun BannerSection(onClick: () -> Unit = {}) {
+fun CustomBannerSection(onClick: () -> Unit = {}) {
     val pagerItems = getBannerList()
 
 
@@ -90,6 +90,7 @@ fun BannerSection(onClick: () -> Unit = {}) {
                     0 -> realCount - 1
                     realCount + 1 -> 0
                     else -> page - 1
+
                 }
                 val painters = pageItem[realIndex]
 

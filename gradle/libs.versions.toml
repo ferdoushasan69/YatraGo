@@ -16,6 +16,7 @@ fontAwesome = "1.1.1"
 junit = "4.13.2"
 koinCore = "4.1.1"
 kotlin = "2.2.10"
+kotlinxDatetime = "0.7.1"
 ktor = "3.2.3"
 coroutines = "1.9.0"
 kotlinxSerializationJson = "1.8.1"
@@ -43,6 +44,7 @@ androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 
 #ktor
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }

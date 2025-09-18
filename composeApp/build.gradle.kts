@@ -71,6 +71,10 @@ kotlin {
             //Navigation
             implementation(libs.androidx.navigation.compose)
 
+            //Date time
+            implementation(libs.kotlinx.datetime)
+
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
