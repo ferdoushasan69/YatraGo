@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.dmmeta.nolapp.presentation.navigation.Screen
-import com.dmmeta.nolapp.presentation.screen.component.BannerSection
+import com.dmmeta.nolapp.presentation.screen.component.CustomBannerSection
 import com.dmmeta.nolapp.presentation.screen.component.CustomOfferButton
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBar
 import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
@@ -53,6 +53,7 @@ import com.dmmeta.nolapp.utils.wideBreakPoint
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.bus_transport
 import nolapp.composeapp.generated.resources.calander
+//import nolapp.composeapp.generated.resources.calander
 import nolapp.composeapp.generated.resources.camping
 import nolapp.composeapp.generated.resources.cart
 import nolapp.composeapp.generated.resources.charaki
@@ -90,7 +91,10 @@ fun HomeScreen(navController: NavHostController) {
 }
 
 @Composable
-fun HomeContent(onCategoryItemClick: (String) -> Unit, onBannerAddClick: () -> Unit) {
+fun HomeContent(
+    onCategoryItemClick: (String) -> Unit,
+    onBannerAddClick: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TopContent()
         Column(
@@ -99,7 +103,7 @@ fun HomeContent(onCategoryItemClick: (String) -> Unit, onBannerAddClick: () -> U
                 .navigationBarsPadding()
         ) {
             CategorySection(onCategoryItemClick = onCategoryItemClick)
-            BannerSection(onClick = onBannerAddClick)
+            CustomBannerSection(onClick = onBannerAddClick)
             OfferButtonSection()
             ProductItemSection()
         }
