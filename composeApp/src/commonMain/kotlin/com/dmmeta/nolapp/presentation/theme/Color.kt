@@ -11,3 +11,5 @@ val TopContentBrush = Brush.linearGradient(
         Color(0xFF4d9bfa),
     )
 )
+
+val PrimaryColor = Color(0xFF4154ff)
