@@ -1,4 +1,4 @@
-package com.dmmeta.nolapp.presentation
+package com.dmmeta.nolapp
 
 interface Platform {
     val name: String

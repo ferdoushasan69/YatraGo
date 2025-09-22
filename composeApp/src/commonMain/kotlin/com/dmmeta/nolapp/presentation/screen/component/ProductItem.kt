@@ -1,6 +1,7 @@
 package com.dmmeta.nolapp.presentation.screen.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -20,9 +21,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ProductItem(
     modifier: Modifier = Modifier,
-    productName: String, productImage: Painter
+    productName: String, productImage: Painter,
+    onClick :()-> Unit
 ) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = modifier.clickable(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = productImage,
             contentDescription = null,
