@@ -16,6 +16,12 @@ sealed class Screen {
     object ViewAllBanner : Screen()
 
     @Serializable
+    object Search : Screen()
+
+    @Serializable
+    object Map : Screen()
+
+    @Serializable
     object RoundMap : Screen()
 
     @Serializable

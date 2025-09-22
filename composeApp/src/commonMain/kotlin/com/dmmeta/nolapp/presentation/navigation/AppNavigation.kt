@@ -19,6 +19,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.dmmeta.nolapp.presentation.screen.category.CategoryScreen
 import com.dmmeta.nolapp.presentation.screen.home.HomeScreen
+import com.dmmeta.nolapp.presentation.screen.map.MapScreen
+import com.dmmeta.nolapp.presentation.screen.search.SearchScreen
 import com.dmmeta.nolapp.presentation.screen.view_all_banner.BannerListScreen
 
 
@@ -74,6 +76,14 @@ fun AppNavigation(navController: NavHostController) {
 
                 composable<Screen.ViewAllBanner> {
                     BannerListScreen(navController)
+                }
+
+                composable<Screen.Search> {
+                    SearchScreen(navController)
+                }
+
+                composable <Screen.Map>{
+                    MapScreen(navController)
                 }
             }
 
