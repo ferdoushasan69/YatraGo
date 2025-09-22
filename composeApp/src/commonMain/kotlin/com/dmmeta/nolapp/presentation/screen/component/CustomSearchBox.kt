@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.dmmeta.nolapp.presentation.theme.PrimaryColor
-import com.dmmeta.nolapp.presentation.theme.dimens
 import com.dmmeta.nolapp.utils.wideBreakPoint
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -56,10 +55,10 @@ import kotlinx.datetime.toLocalDateTime
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.calender_date_picker
 import nolapp.composeapp.generated.resources.close
-import nolapp.composeapp.generated.resources.minus
-import nolapp.composeapp.generated.resources.plus
+import nolapp.composeapp.generated.resources.ic_remove
+import nolapp.composeapp.generated.resources.ic_add
 import nolapp.composeapp.generated.resources.search
-import nolapp.composeapp.generated.resources.user
+import nolapp.composeapp.generated.resources.ic_user
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
@@ -347,14 +346,14 @@ private fun DialogItem(
         ) {
             IconButton(onClick = onDecrease) {
                 Icon(
-                    painterResource(Res.drawable.minus),
+                    painterResource(Res.drawable.ic_remove),
                     contentDescription = null
                 )
             }
             Text(text = countValue, style = MaterialTheme.typography.titleLarge)
             IconButton(onClick = onIncrease) {
                 Icon(
-                    painterResource(Res.drawable.plus),
+                    painterResource(Res.drawable.ic_add),
                     contentDescription = null
                 )
             }
@@ -419,7 +418,7 @@ fun DateAndCountBox(
         VerticalDivider()
         DateBoxItem(
             modifier = Modifier.weight(1f),
-            icon = painterResource(Res.drawable.user),
+            icon = painterResource(Res.drawable.ic_user),
             title = personValue,
             onCLick = {
                 onPersonPick()
