@@ -33,8 +33,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
             implementation(libs.koin.android)
-
-
+            implementation(libs.play.services.location)
+            implementation(libs.play.services.maps)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -74,6 +74,9 @@ kotlin {
             //Date time
             implementation(libs.kotlinx.datetime)
 
+            //DataStore
+            implementation(libs.androidx.datastore.core)
+            implementation(libs.androidx.datastore.preferences)
 
         }
         commonTest.dependencies {

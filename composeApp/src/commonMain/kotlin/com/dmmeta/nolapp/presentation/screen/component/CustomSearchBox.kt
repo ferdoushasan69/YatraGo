@@ -51,6 +51,7 @@ import com.dmmeta.nolapp.presentation.theme.dimens
 import com.dmmeta.nolapp.utils.wideBreakPoint
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.calender_date_picker
@@ -80,7 +81,7 @@ fun CustomSearchBox(
     var userNumb by rememberSaveable { mutableStateOf(1) }
     var fMember by rememberSaveable { mutableStateOf(1) }
     // Store the result
-    var selectedRange by remember {
+    var selectedRange by rememberSaveable {
         mutableStateOf<Pair<Long?, Long?>>(now to now.plus(onDaysMils))
     }
 
@@ -265,10 +266,15 @@ fun DialogContent(
                 DialogItem(
                     itemName = "객실",
                     onIncrease = {
-                        roomNum++
+                        if (roomNum < 10) {
+                            roomNum++
+                        }
                     },
                     onDecrease = {
-                        roomNum--;
+                        if (roomNum <= 1) {
+                            return@DialogItem
+                        }
+                        roomNum--
                     },
                     countValue = roomNum.toString()
                 )
@@ -277,9 +283,15 @@ fun DialogContent(
                 DialogItem(
                     itemName = "성인",
                     onIncrease = {
-                        count성인++
+                        if (count성인 < 10) {
+                            count성인++
+                        }
+
                     },
                     onDecrease = {
+                        if (count성인 <= 1) {
+                            return@DialogItem
+                        }
                         count성인--;
                     },
                     countValue = count성인.toString()
@@ -289,9 +301,14 @@ fun DialogContent(
                 DialogItem(
                     itemName = "아동",
                     onIncrease = {
-                        count아동++
+                        if (count아동 < 10) {
+                            count아동++
+                        }
                     },
                     onDecrease = {
+                        if (count아동 <= 1) {
+                            return@DialogItem
+                        }
                         count아동--;
                     },
                     countValue = count아동.toString()
@@ -413,7 +430,7 @@ fun DateAndCountBox(
 
 
 @Composable
-fun Modifier.showBorder(isLandScape: Boolean): Modifier {
+private fun Modifier.showBorder(isLandScape: Boolean): Modifier {
     return if (isLandScape) {
         border(
             width = 1.dp,
@@ -462,9 +479,9 @@ fun Long.toDayMonth(): String {
     val localDate: LocalDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
 
     val month =
-        if (localDate.monthNumber < 10) "0${localDate.monthNumber}" else "${localDate.monthNumber}"
+        if (localDate.month.number < 10) "0${localDate.month.number}" else "${localDate.month.number}"
     val day =
-        if (localDate.dayOfMonth < 10) "0${localDate.dayOfMonth}" else "${localDate.dayOfMonth}"
+        if (localDate.day < 10) "0${localDate.day}" else "${localDate.day}"
 
     return "$month/$day"
 }

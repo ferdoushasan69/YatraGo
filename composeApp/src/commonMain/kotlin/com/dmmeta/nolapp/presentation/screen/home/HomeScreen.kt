@@ -53,7 +53,6 @@ import com.dmmeta.nolapp.utils.wideBreakPoint
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.bus_transport
 import nolapp.composeapp.generated.resources.calander
-//import nolapp.composeapp.generated.resources.calander
 import nolapp.composeapp.generated.resources.camping
 import nolapp.composeapp.generated.resources.cart
 import nolapp.composeapp.generated.resources.charaki
@@ -86,6 +85,9 @@ fun HomeScreen(navController: NavHostController) {
         },
         onBannerAddClick = {
             navController.navigate(Screen.ViewAllBanner)
+        },
+        onProductClick = {
+            navController.navigate(Screen.Map)
         }
     )
 }
@@ -93,7 +95,8 @@ fun HomeScreen(navController: NavHostController) {
 @Composable
 fun HomeContent(
     onCategoryItemClick: (String) -> Unit,
-    onBannerAddClick: () -> Unit
+    onBannerAddClick: () -> Unit,
+    onProductClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TopContent()
@@ -105,13 +108,13 @@ fun HomeContent(
             CategorySection(onCategoryItemClick = onCategoryItemClick)
             CustomBannerSection(onClick = onBannerAddClick)
             OfferButtonSection()
-            ProductItemSection()
+            ProductItemSection(onClick = onProductClick)
         }
     }
 }
 
 @Composable
-fun ProductItemSection() {
+fun ProductItemSection(onClick: () -> Unit) {
 
     val products = listOf(
         Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
@@ -137,7 +140,8 @@ fun ProductItemSection() {
                 ProductItem(
                     modifier = Modifier.padding(8.dp),
                     productName = product.name,
-                    productImage = product.img
+                    productImage = product.img,
+                    onClick = onClick
                 )
             }
         }
