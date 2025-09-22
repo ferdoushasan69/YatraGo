@@ -1,6 +1,5 @@
 package com.dmmeta.nolapp.presentation.screen.category
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,7 +22,7 @@ import com.dmmeta.nolapp.presentation.screen.component.CustomBannerSection
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBox
 import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
 import nolapp.composeapp.generated.resources.Res
-import nolapp.composeapp.generated.resources.cart
+import nolapp.composeapp.generated.resources.ic_cart
 import nolapp.composeapp.generated.resources.ic_back
 import nolapp.composeapp.generated.resources.search
 import org.jetbrains.compose.resources.painterResource
@@ -65,7 +63,7 @@ fun CategoryContent(
                     }
                     IconButton(onClick = onSearch) {
                         Icon(
-                            painter = painterResource(Res.drawable.cart),
+                            painter = painterResource(Res.drawable.ic_cart),
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )

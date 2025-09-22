@@ -54,7 +54,7 @@ import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.bus_transport
 import nolapp.composeapp.generated.resources.calander
 import nolapp.composeapp.generated.resources.camping
-import nolapp.composeapp.generated.resources.cart
+import nolapp.composeapp.generated.resources.ic_cart
 import nolapp.composeapp.generated.resources.charaki
 import nolapp.composeapp.generated.resources.concert
 import nolapp.composeapp.generated.resources.coupon
@@ -62,7 +62,7 @@ import nolapp.composeapp.generated.resources.event
 import nolapp.composeapp.generated.resources.gift
 import nolapp.composeapp.generated.resources.hotel
 import nolapp.composeapp.generated.resources.jeju_air
-import nolapp.composeapp.generated.resources.menu
+import nolapp.composeapp.generated.resources.ic_menu
 import nolapp.composeapp.generated.resources.mutel
 import nolapp.composeapp.generated.resources.ocean_old
 import nolapp.composeapp.generated.resources.pention
@@ -98,12 +98,16 @@ fun HomeContent(
     onBannerAddClick: () -> Unit,
     onProductClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .navigationBarsPadding()
+            .padding(bottom = 48.dp)
+    ) {
         TopContent()
         Column(
             modifier = Modifier.fillMaxWidth()
                 .padding(8.dp)
-                .navigationBarsPadding()
         ) {
             CategorySection(onCategoryItemClick = onCategoryItemClick)
             CustomBannerSection(onClick = onBannerAddClick)
@@ -128,7 +132,10 @@ fun ProductItemSection(onClick: () -> Unit) {
         Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
         Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
     )
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 8.dp)
+    ) {
         Text(
             text = "이런 상품은 어떠세요? 최근 본 상품과 비슷한 상품",
             style = MaterialTheme.typography.titleMedium,
@@ -348,7 +355,7 @@ private fun TopContent() {
                 navIcon = {
                     IconButton(onClick = {}) {
                         Icon(
-                            painterResource(Res.drawable.menu),
+                            painterResource(Res.drawable.ic_menu),
                             contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier.size(30.dp)
@@ -357,7 +364,7 @@ private fun TopContent() {
                 },
                 topBarAction = {
                     Icon(
-                        painterResource(Res.drawable.cart),
+                        painterResource(Res.drawable.ic_cart),
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(30.dp)
