@@ -32,9 +32,20 @@ fun CategoryScreen(categoryName: String, navHostController: NavHostController) {
     CategoryContent(categoryName = categoryName, onBack = {
         navHostController.navigateUp()
     }, onSearch = {
-
+        navHostController.navigate(Screen.CategorySelection) {
+            launchSingleTop = true
+            restoreState = true
+        }
     }, onBannerList = {
-        navHostController.navigate(Screen.ViewAllBanner)
+        navHostController.navigate(Screen.ViewAllBanner) {
+            launchSingleTop = true
+            restoreState = true
+        }
+    }, onSearchBoxClick = {
+        navHostController.navigate(Screen.CategorySelection) {
+            launchSingleTop = true
+            restoreState = true
+        }
     })
 }
 
@@ -42,26 +53,36 @@ fun CategoryScreen(categoryName: String, navHostController: NavHostController) {
 fun CategoryContent(
     categoryName: String,
     onBack: () -> Unit,
-    onSearch: () -> Unit, onBannerList: () -> Unit
+    onSearch: () -> Unit,
+    onBannerList: () -> Unit,
+    onSearchBoxClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         CustomTopAppBar(
             title = categoryName,
             modifier = Modifier.fillMaxWidth(),
             navIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(painter = painterResource(Res.drawable.ic_back), contentDescription = null)
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_back),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
                 }
             },
             topBarAction = {
                 Row(modifier = Modifier.padding(end = 8.dp)) {
-                    IconButton(onClick = onBack) {
+                    IconButton(onClick = onSearch) {
                         Icon(
                             painter = painterResource(Res.drawable.search),
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
                         )
                     }
-                    IconButton(onClick = onSearch) {
+                    IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_cart),
                             contentDescription = null,
@@ -70,14 +91,15 @@ fun CategoryContent(
                     }
                 }
             },
-            textStyle = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.background)
+            textStyle = MaterialTheme.typography.titleLarge.copy(
+                color = MaterialTheme.colorScheme.background
+            )
         )
 
         CustomSearchBox(
-            onSearch = {
+            onSearch = onSearchBoxClick,
 
-            }
-        )
+            )
         Spacer(Modifier.height(8.dp))
         CustomBannerSection {
             onBannerList()

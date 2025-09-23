@@ -88,6 +88,9 @@ fun HomeScreen(navController: NavHostController) {
         },
         onProductClick = {
             navController.navigate(Screen.Map)
+        },
+        onClick = {
+            navController.navigate(Screen.CategorySelection)
         }
     )
 }
@@ -96,7 +99,8 @@ fun HomeScreen(navController: NavHostController) {
 fun HomeContent(
     onCategoryItemClick: (String) -> Unit,
     onBannerAddClick: () -> Unit,
-    onProductClick: () -> Unit
+    onProductClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -104,7 +108,7 @@ fun HomeContent(
             .navigationBarsPadding()
             .padding(bottom = 48.dp)
     ) {
-        TopContent()
+        TopContent(onClick = onClick)
         Column(
             modifier = Modifier.fillMaxWidth()
                 .padding(8.dp)
@@ -132,9 +136,10 @@ fun ProductItemSection(onClick: () -> Unit) {
         Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
         Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
     )
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 8.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
     ) {
         Text(
             text = "이런 상품은 어떠세요? 최근 본 상품과 비슷한 상품",
@@ -331,7 +336,7 @@ data class Item(
 )
 
 @Composable
-private fun TopContent() {
+private fun TopContent(onClick: () -> Unit) {
     var textValue by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
@@ -376,7 +381,9 @@ private fun TopContent() {
                 onValueChange = {
                     textValue = it
                 },
-                value = textValue
+                value = textValue,
+                onClick = onClick,
+                isSearch = true
             )
         }
     }
@@ -387,5 +394,5 @@ private fun TopContent() {
 @Composable
 fun HomeScreenPreView() {
 //    HomeScreen()
-    TopContent()
+//    TopContent()
 }

@@ -1,0 +1,156 @@
+package com.dmmeta.nolapp.presentation.screen.category_search
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBox
+import com.dmmeta.nolapp.presentation.theme.PrimaryColor
+import nolapp.composeapp.generated.resources.Res
+import nolapp.composeapp.generated.resources.ic_apertment
+import nolapp.composeapp.generated.resources.ic_back
+import nolapp.composeapp.generated.resources.ic_flight
+import nolapp.composeapp.generated.resources.ic_mic
+import nolapp.composeapp.generated.resources.ic_park
+import nolapp.composeapp.generated.resources.tower
+import org.jetbrains.compose.resources.painterResource
+
+@Composable
+fun CategorySearchScreen(navHostController: NavHostController) {
+
+    CategorySearchContent()
+}
+
+@Composable
+private fun CategorySearchContent() {
+    val focusRequester = remember { FocusRequester() }
+
+    // Request focus when this screen appears
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+    val categories = listOf(
+        CategoryOption(label = "국내패키지", icon = painterResource(Res.drawable.ic_park)),
+        CategoryOption(label = "공연/전시", icon = painterResource(Res.drawable.ic_mic)),
+        CategoryOption(label = "해외숙소", icon = painterResource(Res.drawable.ic_apertment)),
+        CategoryOption(label = "해외투어/티켓", icon = painterResource(Res.drawable.tower)),
+        CategoryOption(label = "항공", icon = painterResource(Res.drawable.ic_flight))
+    )
+    var selectedIndex by remember { mutableStateOf(2) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            IconButton(onClick = {}, modifier = Modifier) {
+                Icon(
+                    painterResource(Res.drawable.ic_back),
+                    contentDescription = null
+                )
+            }
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                itemsIndexed(categories) { index, item ->
+                    CategoryItem(
+                        label = item.label,
+                        icon = item.icon,
+                        modifier = Modifier.padding(8.dp),
+                        onClick = {
+                            selectedIndex = index
+                        },
+                        selected = selectedIndex == index
+                    )
+                }
+            }
+
+            CustomSearchBox(
+                isSearch = false,
+                onSearch = {},
+                modifier = Modifier.focusRequester(focusRequester)
+            )
+        }
+    }
+}
+
+data class CategoryOption(
+    val icon: Painter,
+    val label: String
+)
+
+@Composable
+private fun CategoryItem(
+    label: String,
+    modifier: Modifier = Modifier,
+    icon: Painter,
+    onClick: () -> Unit,
+    selected: Boolean
+) {
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        ElevatedCard(
+            modifier = Modifier
+                .size(55.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = if (selected) PrimaryColor else MaterialTheme.colorScheme.surfaceBright
+            ),
+            elevation = CardDefaults.elevatedCardElevation(10.dp),
+            onClick = onClick
+
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp),
+                    tint = if (selected) Color.White else PrimaryColor
+                )
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(text = label, style = MaterialTheme.typography.titleMedium)
+
+    }
+}
+
+@Composable
+private fun Modifier.showBgColor(isShow: Boolean): Modifier {
+    return if (isShow) {
+        background(PrimaryColor)
+    } else {
+        Modifier
+    }
+}

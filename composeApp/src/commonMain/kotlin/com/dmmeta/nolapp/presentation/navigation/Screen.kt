@@ -13,6 +13,9 @@ sealed class Screen {
     data class Category(val categoryName: String) : Screen()
 
     @Serializable
+    data object CategorySelection
+
+    @Serializable
     object ViewAllBanner : Screen()
 
     @Serializable

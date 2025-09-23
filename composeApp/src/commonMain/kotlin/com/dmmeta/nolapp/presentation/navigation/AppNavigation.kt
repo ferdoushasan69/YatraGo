@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
 import com.dmmeta.nolapp.presentation.screen.category.CategoryScreen
+import com.dmmeta.nolapp.presentation.screen.category_search.CategorySearchScreen
 import com.dmmeta.nolapp.presentation.screen.component.AppBottomNavigationBar
 import com.dmmeta.nolapp.presentation.screen.home.HomeScreen
 import com.dmmeta.nolapp.presentation.screen.map.MapScreen
@@ -60,9 +61,12 @@ fun AppNavigation(navController: NavHostController) {
 
     Scaffold(
         bottomBar = {
-            AppBottomNavigationBar(
-                navController = navController
-            )
+            if (showBottomBar) {
+                AppBottomNavigationBar(
+                    navController = navController
+                )
+            }
+
         }
     ) { innerPadding ->
         val animatedPadding by animateDpAsState(
@@ -124,6 +128,11 @@ fun AppNavigation(navController: NavHostController) {
                         navHostController = navController
                     )
                 }
+
+                composable<Screen.CategorySelection> {
+                    CategorySearchScreen(navHostController = navController)
+                }
+
 
                 composable<Screen.ViewAllBanner> {
                     BannerListScreen(navController)
