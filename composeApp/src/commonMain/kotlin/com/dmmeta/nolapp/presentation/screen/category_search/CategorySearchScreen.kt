@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBox
 import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
+import com.dmmeta.nolapp.presentation.screen.component.SearchListTile
 import com.dmmeta.nolapp.presentation.theme.PrimaryColor
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.ic_apertment
@@ -60,22 +61,21 @@ fun CategorySearchScreen(navHostController: NavHostController) {
 }
 
 @Composable
-private fun CategorySearchContent(onBack : ()-> Unit) {
+private fun CategorySearchContent(onBack: () -> Unit) {
     val focusRequester = remember { FocusRequester() }
 
-    var categoryName by remember { mutableStateOf("") }
-    // Request focus when this screen appears
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
     val categories = listOf(
         CategoryOption(label = "국내패키지", icon = painterResource(Res.drawable.ic_park)),
-        CategoryOption(label = "공연/전시", icon = painterResource(Res.drawable.ic_mic)),
+        CategoryOption(label = "공연", icon = painterResource(Res.drawable.ic_mic)),
         CategoryOption(label = "해외숙소", icon = painterResource(Res.drawable.ic_apertment)),
-        CategoryOption(label = "해외투어/티켓", icon = painterResource(Res.drawable.tower)),
+        CategoryOption(label = "해외투어", icon = painterResource(Res.drawable.tower)),
         CategoryOption(label = "항공", icon = painterResource(Res.drawable.ic_flight))
     )
     var selectedIndex by remember { mutableStateOf(2) }
+    var categoryName by remember { mutableStateOf(categories[selectedIndex].label) }
 
 
     Column(
@@ -129,14 +129,27 @@ private fun CategorySearchContent(onBack : ()-> Unit) {
             Text(text = "$categoryName", style = MaterialTheme.typography.titleMedium)
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "최근 검색", style = MaterialTheme.typography.titleMedium)
-            Text(text = "전체 삭제", style = MaterialTheme.typography.titleMedium)
-        }
+
+        SearchListTile(
+            locationName = "콕스 바자, 방글라데시",
+            dateInfo = "08.28-06.29-1박 객실 성인 2",
+            onCancel = {}
+        )
+        SearchListTile(
+            locationName = "콕스 바자, 방글라데시",
+            dateInfo = "08.28-06.29-1박 객실 성인 2",
+            onCancel = {}
+        )
+        SearchListTile(
+            locationName = "콕스 바자, 방글라데시",
+            dateInfo = "08.28-06.29-1박 객실 성인 2",
+            onCancel = {}
+        )
+        SearchListTile(
+            locationName = "콕스 바자, 방글라데시",
+            dateInfo = "08.28-06.29-1박 객실 성인 2",
+            onCancel = {}
+        )
     }
 }
 

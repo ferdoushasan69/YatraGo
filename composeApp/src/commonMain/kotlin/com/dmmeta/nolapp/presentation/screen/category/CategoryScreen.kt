@@ -98,9 +98,9 @@ fun CategoryContent(
 
         CustomSearchBox(
             onSearch = onSearchBoxClick,
-            modifier = Modifier.padding(16.dp)
-
-            )
+            modifier = Modifier,
+            isSearch = true
+        )
         Spacer(Modifier.height(8.dp))
         CustomBannerSection {
             onBannerList()
