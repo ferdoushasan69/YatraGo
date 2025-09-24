@@ -52,11 +52,15 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun CategorySearchScreen(navHostController: NavHostController) {
 
-    CategorySearchContent()
+    CategorySearchContent(
+        onBack = {
+            navHostController.navigateUp()
+        }
+    )
 }
 
 @Composable
-private fun CategorySearchContent() {
+private fun CategorySearchContent(onBack : ()-> Unit) {
     val focusRequester = remember { FocusRequester() }
 
     var categoryName by remember { mutableStateOf("") }
@@ -80,7 +84,7 @@ private fun CategorySearchContent() {
     ) {
         CustomTopAppBar(
             navIcon = {
-                IconButton(onClick = {}, modifier = Modifier) {
+                IconButton(onClick = onBack, modifier = Modifier) {
                     Icon(
                         painterResource(Res.drawable.ic_back),
                         contentDescription = null

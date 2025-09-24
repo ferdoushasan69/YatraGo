@@ -98,6 +98,7 @@ fun CategoryContent(
 
         CustomSearchBox(
             onSearch = onSearchBoxClick,
+            modifier = Modifier.padding(16.dp)
 
             )
         Spacer(Modifier.height(8.dp))
