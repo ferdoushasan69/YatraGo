@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,8 @@ fun MapContent(onBack: () -> Unit) {
     var mapWeightTarget by remember { mutableStateOf(1f) }
     var locationName by remember { mutableStateOf("") }
     var setMapView: MapView? by remember { mutableStateOf(null) }
+    var mapReady by remember { mutableStateOf(false) }
+
     val animatedMapWeight by animateFloatAsState(
         targetValue = mapWeightTarget,
         animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
@@ -80,6 +84,7 @@ fun MapContent(onBack: () -> Unit) {
                     .weight(.7f),
                 onMapReady = { mapView ->
                     setMapView = mapView
+                    mapReady = true
                     mapView.setLocationByName("Dhaka") { result ->
                         locationName = result ?: ""
                     }
@@ -105,6 +110,14 @@ fun MapContent(onBack: () -> Unit) {
                     locationName = it ?: ""
                 },
             )
+            if (!mapReady) {
+                Box(
+                    Modifier.fillMaxWidth().weight(.7f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
             CustomLocationItem(
                 locationName = locationName,
                 buttonText = "주소 복사",
