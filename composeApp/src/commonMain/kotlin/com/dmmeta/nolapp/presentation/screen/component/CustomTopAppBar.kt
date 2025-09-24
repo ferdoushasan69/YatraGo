@@ -3,6 +3,7 @@ package com.dmmeta.nolapp.presentation.screen.component
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -19,14 +20,15 @@ fun CustomTopAppBar(
     navIcon: @Composable (() -> Unit)? = null,
     topBarAction: @Composable (() -> Unit)? = null,
     isHome: Boolean = false,
-    textStyle: TextStyle = TextStyle()
+    textStyle: TextStyle = TextStyle(),
+    titleColor : Color = MaterialTheme.colorScheme.onBackground
 ) {
     TopAppBar(
         windowInsets = WindowInsets(0),
         title = {
             Text(
                 text = title ?: "", textAlign = if (isHome) TextAlign.Center else TextAlign.Start,
-                color = Color.White,
+                color = titleColor,
                 style = textStyle,
                 modifier = Modifier.fillMaxWidth()
             )

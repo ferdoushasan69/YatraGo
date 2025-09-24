@@ -22,9 +22,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,15 +56,15 @@ import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.bus_transport
 import nolapp.composeapp.generated.resources.calander
 import nolapp.composeapp.generated.resources.camping
-import nolapp.composeapp.generated.resources.ic_cart
 import nolapp.composeapp.generated.resources.charaki
 import nolapp.composeapp.generated.resources.concert
 import nolapp.composeapp.generated.resources.coupon
 import nolapp.composeapp.generated.resources.event
 import nolapp.composeapp.generated.resources.gift
 import nolapp.composeapp.generated.resources.hotel
-import nolapp.composeapp.generated.resources.jeju_air
+import nolapp.composeapp.generated.resources.ic_cart
 import nolapp.composeapp.generated.resources.ic_menu
+import nolapp.composeapp.generated.resources.jeju_air
 import nolapp.composeapp.generated.resources.mutel
 import nolapp.composeapp.generated.resources.ocean_old
 import nolapp.composeapp.generated.resources.pention
@@ -356,6 +358,7 @@ private fun TopContent(onClick: () -> Unit) {
                     .copy(fontWeight = FontWeight.Bold, fontSize = 33.sp),
                 isHome = true,
                 title = "NOL",
+                titleColor = Color.White,
                 modifier = Modifier.fillMaxWidth().statusBarsPadding(),
                 navIcon = {
                     IconButton(onClick = {}) {
@@ -387,6 +390,18 @@ private fun TopContent(onClick: () -> Unit) {
             )
         }
     }
+}
+
+@Composable
+private fun CustomDrawer(drawerState: DrawerState,modifier: Modifier= Modifier){
+        ModalDrawerSheet(
+            drawerState = drawerState,
+            modifier = modifier,
+            drawerContentColor = MaterialTheme.colorScheme.surface,
+            content = {
+                Text("Okay")
+            }
+        )
 }
 
 

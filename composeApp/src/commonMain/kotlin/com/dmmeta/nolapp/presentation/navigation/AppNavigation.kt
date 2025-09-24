@@ -3,9 +3,8 @@ package com.dmmeta.nolapp.presentation.navigation
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -98,22 +97,18 @@ fun AppNavigation(navController: NavHostController) {
                 navController = navController,
                 modifier = Modifier.fillMaxSize(),
                 enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { it },
+                    fadeIn(
                         animationSpec = tween(
                             durationMillis = 300,
-                            easing = FastOutSlowInEasing
                         )
                     )
                 },
                 exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { -it },
+                    fadeOut(
                         animationSpec = tween(
                             durationMillis = 300,
-                            easing = FastOutSlowInEasing
                         )
-                    ) + fadeOut(animationSpec = tween(300))
+                    )
                 },
 
                 startDestination = Screen.Home,
