@@ -15,18 +15,22 @@ import androidx.compose.ui.text.style.TextAlign
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
-    title: String?, modifier: Modifier = Modifier,
+    title: String? = "", modifier: Modifier = Modifier,
     navIcon: @Composable (() -> Unit)? = null,
     topBarAction: @Composable (() -> Unit)? = null,
-    isHome : Boolean = false,
-    textStyle : TextStyle = TextStyle()
+    isHome: Boolean = false,
+    textStyle: TextStyle = TextStyle()
 ) {
     TopAppBar(
         windowInsets = WindowInsets(0),
-        title = { Text(text = title ?: "", textAlign = if(isHome)TextAlign.Center else TextAlign.Start,
-            color = Color.White,
-            style = textStyle,
-            modifier = Modifier.fillMaxWidth()) },
+        title = {
+            Text(
+                text = title ?: "", textAlign = if (isHome) TextAlign.Center else TextAlign.Start,
+                color = Color.White,
+                style = textStyle,
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
         navigationIcon = {

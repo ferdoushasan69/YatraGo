@@ -5,11 +5,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,7 +45,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.dmmeta.nolapp.presentation.theme.PrimaryColor
-import com.dmmeta.nolapp.utils.wideBreakPoint
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
@@ -71,8 +68,9 @@ import kotlin.time.Instant
 @Composable
 fun CustomSearchBox(
     onSearch: () -> Unit,
-    isSearch: Boolean = true,
-    modifier: Modifier = Modifier
+    isSearch: Boolean = false,
+    modifier: Modifier = Modifier,
+    categoryName: String? = null
 ) {
     val now = Clock.System.now().toEpochMilliseconds()
     val onDaysMils = 1.days.inWholeMilliseconds
@@ -158,70 +156,69 @@ fun CustomSearchBox(
             }
         )
     }
-    BoxWithConstraints {
-        if (maxWidth >= wideBreakPoint) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(end = 10.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SearchBox(
-                    modifier = modifier.weight(1f),
-                    onSearch = {
+//        if (maxWidth >= wideBreakPoint) {
+//            Row(
+//                modifier = Modifier.fillMaxWidth().padding(end = 10.dp)
+//                    .clip(RoundedCornerShape(8.dp)),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                SearchBox(
+//                    modifier = modifier,
+//                    onSearch = {
+//
+//                    },
+//                    isLandScape = true,
+//                    isSearch = isSearch,
+//                )
+//                DateAndCountBox(
+//                    modifier = Modifier,
+//                    isLandScape = true,
+//                    onDatePick = {
+//                        showDialog = true
+//                    },
+//                    pickDate = "$selectedDate · ${nights}박",
+//                    onPersonPick = {
+//                        showUserDialogue = true
+//                    },
+//                    personValue = "객실 $roomNumb, 성인 $userNumb, 아동 $fMember",
+//                )
+//            }
+//        } else {
+    Column(
+        modifier = modifier.fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outlineVariant,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clip(RoundedCornerShape(8.dp)),
+    ) {
+        SearchBox(
+            modifier = modifier,
+            onSearch = {
+                onSearch()
+            },
+            isLandScape = false,
+            isSearch = isSearch,
+            categoryName = categoryName
 
-                    },
-                    isLandScape = true,
-                    isSearch = isSearch,
-                )
-                DateAndCountBox(
-                    modifier = Modifier.weight(1f),
-                    isLandScape = true,
-                    onDatePick = {
-                        showDialog = true
-                    },
-                    pickDate = "$selectedDate · ${nights}박",
-                    onPersonPick = {
-                        showUserDialogue = true
-                    },
-                    personValue = "객실 $roomNumb, 성인 $userNumb, 아동 $fMember",
-                )
-            }
-        } else {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(16.dp)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp)),
-            ) {
-                SearchBox(
-                    modifier = modifier,
-                    onSearch = {
-                        onSearch()
-                    },
-                    isLandScape = false,
-                    isSearch = isSearch
-                )
-                HorizontalDivider()
-                DateAndCountBox(
-                    modifier = Modifier.fillMaxWidth(),
-                    isLandScape = false,
-                    onDatePick = {
-                        showDialog = true
-                    },
-                    pickDate = "$selectedDate · ${nights}박",
-                    onPersonPick = {
-                        showUserDialogue = true
-                    },
-                    personValue = "객실 $roomNumb, 성인 $userNumb, 아동 $fMember"
-                )
-            }
-        }
+        )
+        HorizontalDivider()
+        DateAndCountBox(
+            modifier = Modifier,
+            isLandScape = false,
+            onDatePick = {
+                showDialog = true
+            },
+            pickDate = "$selectedDate · ${nights}박",
+            onPersonPick = {
+                showUserDialogue = true
+            },
+            personValue = "객실 $roomNumb, 성인 $userNumb, 아동 $fMember"
+        )
     }
+//        }
 }
 
 @Composable
@@ -381,7 +378,8 @@ private fun SearchBox(
     modifier: Modifier = Modifier,
     onSearch: () -> Unit,
     isLandScape: Boolean,
-    isSearch: Boolean
+    isSearch: Boolean,
+    categoryName: String? = null
 ) {
     var text by remember { mutableStateOf("") }
     Row(
@@ -398,11 +396,23 @@ private fun SearchBox(
             singleLine = true,
             value = text,
             prefix = {
-                Icon(
-                    painterResource(Res.drawable.search),
-                    contentDescription = null,
-                    modifier = Modifier.size(26.dp)
-                )
+                Row(modifier = Modifier) {
+                    Icon(
+                        painterResource(Res.drawable.search),
+                        contentDescription = null,
+                        modifier = Modifier.size(26.dp)
+                    )
+                    if (isSearch && categoryName?.isNotEmpty() == true) {
+                        Text(
+                            text = categoryName ?: "",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.background(
+                                MaterialTheme.colorScheme.outlineVariant
+                            ).padding(8.dp)
+                        )
+                    }
+                }
+
             },
             colors = TextFieldDefaults.colors(
                 unfocusedIndicatorColor = Color.Transparent,
@@ -484,7 +494,6 @@ fun DateBoxItem(
 ) {
     Row(
         modifier = modifier
-            .fillMaxHeight()
             .clickable(onClick = onCLick)
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,

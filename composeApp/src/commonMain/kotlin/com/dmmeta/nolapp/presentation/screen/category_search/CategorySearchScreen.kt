@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -34,6 +38,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBox
+import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.nolapp.presentation.theme.PrimaryColor
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.ic_apertment
@@ -54,6 +59,7 @@ fun CategorySearchScreen(navHostController: NavHostController) {
 private fun CategorySearchContent() {
     val focusRequester = remember { FocusRequester() }
 
+    var categoryName by remember { mutableStateOf("") }
     // Request focus when this screen appears
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -67,38 +73,65 @@ private fun CategorySearchContent() {
     )
     var selectedIndex by remember { mutableStateOf(2) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
 
-        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-            IconButton(onClick = {}, modifier = Modifier) {
-                Icon(
-                    painterResource(Res.drawable.ic_back),
-                    contentDescription = null
-                )
-            }
-
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                itemsIndexed(categories) { index, item ->
-                    CategoryItem(
-                        label = item.label,
-                        icon = item.icon,
-                        modifier = Modifier.padding(8.dp),
-                        onClick = {
-                            selectedIndex = index
-                        },
-                        selected = selectedIndex == index
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
+        CustomTopAppBar(
+            navIcon = {
+                IconButton(onClick = {}, modifier = Modifier) {
+                    Icon(
+                        painterResource(Res.drawable.ic_back),
+                        contentDescription = null
                     )
                 }
-            }
+            },
+        )
 
-            CustomSearchBox(
-                isSearch = false,
-                onSearch = {},
-                modifier = Modifier.focusRequester(focusRequester)
-            )
+
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            itemsIndexed(categories) { index, item ->
+                CategoryItem(
+                    label = item.label,
+                    icon = item.icon,
+                    modifier = Modifier.padding(8.dp),
+                    onClick = {
+                        selectedIndex = index
+                        categoryName = item.label
+                    },
+                    selected = selectedIndex == index
+                )
+            }
+        }
+
+        CustomSearchBox(
+            isSearch = false,
+            onSearch = {},
+            modifier = Modifier.padding(16.dp).focusRequester(focusRequester),
+            categoryName = categoryName
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "최근 검색", style = MaterialTheme.typography.titleMedium)
+            Text(text = "$categoryName", style = MaterialTheme.typography.titleMedium)
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "최근 검색", style = MaterialTheme.typography.titleMedium)
+            Text(text = "전체 삭제", style = MaterialTheme.typography.titleMedium)
         }
     }
 }

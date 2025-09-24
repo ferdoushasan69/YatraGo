@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -143,7 +144,7 @@ fun AppNavigation(navController: NavHostController) {
                 }
 
                 composable<Screen.Map> {
-                    MapScreen(navController)
+                    KeepAlive { MapScreen(navController) }
                 }
 
                 composable<Screen.Favorite> {
@@ -160,5 +161,14 @@ fun AppNavigation(navController: NavHostController) {
 
         }
 
+    }
+}
+
+
+@Composable
+fun KeepAlive(content: @Composable () -> Unit) {
+    val saveableStateHolder = rememberSaveableStateHolder()
+    saveableStateHolder.SaveableStateProvider("map") {
+        content()
     }
 }
