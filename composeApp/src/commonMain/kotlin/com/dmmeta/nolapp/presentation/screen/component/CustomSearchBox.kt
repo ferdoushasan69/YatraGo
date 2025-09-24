@@ -3,7 +3,6 @@ package com.dmmeta.nolapp.presentation.screen.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -30,7 +29,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,10 +55,10 @@ import kotlinx.datetime.toLocalDateTime
 import nolapp.composeapp.generated.resources.Res
 import nolapp.composeapp.generated.resources.calender_date_picker
 import nolapp.composeapp.generated.resources.close
-import nolapp.composeapp.generated.resources.ic_remove
 import nolapp.composeapp.generated.resources.ic_add
-import nolapp.composeapp.generated.resources.search
+import nolapp.composeapp.generated.resources.ic_remove
 import nolapp.composeapp.generated.resources.ic_user
+import nolapp.composeapp.generated.resources.search
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
@@ -71,6 +71,8 @@ import kotlin.time.Instant
 @Composable
 fun CustomSearchBox(
     onSearch: () -> Unit,
+    isSearch: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
     val now = Clock.System.now().toEpochMilliseconds()
     val onDaysMils = 1.days.inWholeMilliseconds
@@ -79,7 +81,7 @@ fun CustomSearchBox(
     var roomNumb by rememberSaveable { mutableStateOf(1) }
     var userNumb by rememberSaveable { mutableStateOf(1) }
     var fMember by rememberSaveable { mutableStateOf(1) }
-    // Store the result
+
     var selectedRange by rememberSaveable {
         mutableStateOf<Pair<Long?, Long?>>(now to now.plus(onDaysMils))
     }
@@ -147,7 +149,11 @@ fun CustomSearchBox(
                         roomNumb = roomNum
                         userNumb = userN
                         fMember = fMemb
-                    }
+                        showUserDialogue = false
+                    },
+                    roomNumInit = roomNumb,
+                    userNInit = userNumb,
+                    fMembInit = fMember
                 )
             }
         )
@@ -161,11 +167,12 @@ fun CustomSearchBox(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SearchBox(
-                    modifier = Modifier.weight(1f),
+                    modifier = modifier.weight(1f),
                     onSearch = {
 
                     },
-                    isLandScape = true
+                    isLandScape = true,
+                    isSearch = isSearch,
                 )
                 DateAndCountBox(
                     modifier = Modifier.weight(1f),
@@ -189,14 +196,15 @@ fun CustomSearchBox(
                         color = MaterialTheme.colorScheme.outlineVariant,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(8.dp)),
             ) {
                 SearchBox(
-                    modifier = Modifier,
+                    modifier = modifier,
                     onSearch = {
-
+                        onSearch()
                     },
-                    isLandScape = false
+                    isLandScape = false,
+                    isSearch = isSearch
                 )
                 HorizontalDivider()
                 DateAndCountBox(
@@ -219,15 +227,21 @@ fun CustomSearchBox(
 @Composable
 fun DialogContent(
     onDismiss: () -> Unit,
-    onClick: (Int, Int, Int) -> Unit
+    onClick: (Int, Int, Int) -> Unit,
+    roomNumInit: Int,
+    userNInit: Int,
+    fMembInit: Int,
 ) {
-    var count성인 by rememberSaveable { mutableStateOf(1) }
-    var count아동 by rememberSaveable { mutableStateOf(1) }
-    var roomNum by rememberSaveable { mutableStateOf(1) }
+    var count성인 by rememberSaveable { mutableStateOf(userNInit) }
+    var count아동 by rememberSaveable { mutableStateOf(fMembInit) }
+    var roomNum by rememberSaveable { mutableStateOf(roomNumInit) }
     Column(
         modifier = Modifier.widthIn(min = 500.dp, max = 600.dp)
             .padding(16.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(16.dp))
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(16.dp)
+            )
             .padding(16.dp)
             .clip(RoundedCornerShape(16.dp))
     ) {
@@ -320,8 +334,8 @@ fun DialogContent(
                 onClick(roomNum, count성인, count아동)
                 onDismiss()
             }, colors = ButtonDefaults
-                .buttonColors(containerColor = PrimaryColor),
-            modifier = Modifier.height(56.dp).fillMaxWidth()
+                .buttonColors(containerColor = PrimaryColor, contentColor = Color.White),
+            modifier = Modifier.height(46.dp).fillMaxWidth()
 
         ) {
             Text("객실 $roomNum, 성인 $count성인, 아동 $count아동")
@@ -366,27 +380,48 @@ private fun DialogItem(
 private fun SearchBox(
     modifier: Modifier = Modifier,
     onSearch: () -> Unit,
-    isLandScape: Boolean
+    isLandScape: Boolean,
+    isSearch: Boolean
 ) {
+    var text by remember { mutableStateOf("") }
     Row(
-        modifier = modifier.fillMaxWidth()
-            .padding(12.dp)
+        modifier = Modifier.fillMaxWidth()
             .showBorder(isLandScape)
-            .clip(RoundedCornerShape(8.dp))
-            .clickable(
-                interactionSource = MutableInteractionSource(),
-                indication = null,
-                onClick = onSearch
-            )
-            .padding(12.dp),
+            .clip(RoundedCornerShape(8.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painterResource(Res.drawable.search),
-            contentDescription = null,
-            modifier = Modifier.size(26.dp)
+
+        TextField(
+            onValueChange = {
+                text = it
+            },
+            singleLine = true,
+            value = text,
+            prefix = {
+                Icon(
+                    painterResource(Res.drawable.search),
+                    contentDescription = null,
+                    modifier = Modifier.size(26.dp)
+                )
+            },
+            colors = TextFieldDefaults.colors(
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+            ),
+            placeholder = {
+                Text("도시, 명소, 숙소명으로 찾아보세요")
+            },
+            modifier = modifier.isSearch(
+                isSearch,
+                onClick = {
+                    if (isSearch) {
+                        onSearch()
+                    }
+                }
+            ),
         )
-        Text("도시, 명소, 숙소명으로 찾아보세요")
 
     }
 
@@ -402,22 +437,21 @@ fun DateAndCountBox(
     personValue: String
 ) {
     Row(
-        modifier = modifier
+        modifier = modifier.fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .showBorder(isLandScape),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         DateBoxItem(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier,
             icon = painterResource(Res.drawable.calender_date_picker),
             title = pickDate,
             onCLick = {
                 onDatePick()
             }
         )
-        VerticalDivider()
         DateBoxItem(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier,
             icon = painterResource(Res.drawable.ic_user),
             title = personValue,
             onCLick = {
@@ -453,15 +487,15 @@ fun DateBoxItem(
             .fillMaxHeight()
             .clickable(onClick = onCLick)
             .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
 
         Icon(
             icon, contentDescription = null,
             modifier = Modifier.size(24.dp)
         )
-        Spacer(Modifier.width(4.dp))
-        Text(text = title, style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.width(5.dp))
+        Text(text = title, style = MaterialTheme.typography.titleSmall)
     }
 }
 

@@ -3,6 +3,7 @@ package com.dmmeta.nolapp.presentation.screen.component
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -156,19 +159,41 @@ fun PlayerBox(
                 )
             }
 
-            Text(
-                text = "$currentPage / $pageSize",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 8.dp)
+            CustomAddButton(
+                currentPage = currentPage,
+                pageSize = pageSize,
+                onClick = onAdd
             )
 
-            IconButton(onClick = onAdd) {
-                Icon(
-                    painterResource(Res.drawable.ic_add),
-                    contentDescription = null
-                )
-            }
-
         }
+    }
+}
+
+@Composable
+private fun CustomAddButton(
+    currentPage: Int,
+    pageSize: Int,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .padding(3.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primary.copy(.1f),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .clip(RoundedCornerShape(20.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "$currentPage / $pageSize",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+        Icon(
+            painterResource(Res.drawable.ic_add),
+            contentDescription = null
+        )
     }
 }

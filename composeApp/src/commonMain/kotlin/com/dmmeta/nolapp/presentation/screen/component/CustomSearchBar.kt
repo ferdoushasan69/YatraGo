@@ -12,6 +12,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.dmmeta.nolapp.presentation.theme.SearchBarColor
@@ -21,7 +22,12 @@ import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomSearchBar(onValueChange: (String) -> Unit, value: String) {
+fun CustomSearchBar(
+    onValueChange: (String) -> Unit,
+    value: String,
+    isSearch: Boolean,
+    onClick: () -> Unit
+) {
     TextField(
         placeholder = {
             Text(text = "무엇을 찾아드릴까요?", color = Color.White.copy(.7f))
@@ -31,7 +37,13 @@ fun CustomSearchBar(onValueChange: (String) -> Unit, value: String) {
             .padding(
                 8.dp
             )
-            .clip(RoundedCornerShape(40.dp)),
+            .clip(RoundedCornerShape(40.dp))
+            .isSearch(
+                isSearch,
+                onClick = {
+                    onClick()
+                }
+            ),
         onValueChange = onValueChange,
         prefix = {
             Icon(
@@ -53,4 +65,17 @@ fun CustomSearchBar(onValueChange: (String) -> Unit, value: String) {
             unfocusedTextColor = Color.White,
         )
     )
+}
+
+@Composable
+fun Modifier.isSearch(isSearch: Boolean, onClick: () -> Unit): Modifier {
+    return if (isSearch) {
+        onFocusChanged {
+            if (it.isFocused) {
+                onClick()
+            }
+        }
+    } else {
+        Modifier
+    }
 }
