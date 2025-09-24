@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.dmmeta.nolapp.presentation.theme.PrimaryColor
@@ -68,7 +69,7 @@ import kotlin.time.Instant
 @Composable
 fun CustomSearchBox(
     onSearch: () -> Unit,
-    isSearch: Boolean = false,
+    isSearch: Boolean,
     modifier: Modifier = Modifier,
     categoryName: String? = null
 ) {
@@ -156,35 +157,6 @@ fun CustomSearchBox(
             }
         )
     }
-//        if (maxWidth >= wideBreakPoint) {
-//            Row(
-//                modifier = Modifier.fillMaxWidth().padding(end = 10.dp)
-//                    .clip(RoundedCornerShape(8.dp)),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                SearchBox(
-//                    modifier = modifier,
-//                    onSearch = {
-//
-//                    },
-//                    isLandScape = true,
-//                    isSearch = isSearch,
-//                )
-//                DateAndCountBox(
-//                    modifier = Modifier,
-//                    isLandScape = true,
-//                    onDatePick = {
-//                        showDialog = true
-//                    },
-//                    pickDate = "$selectedDate · ${nights}박",
-//                    onPersonPick = {
-//                        showUserDialogue = true
-//                    },
-//                    personValue = "객실 $roomNumb, 성인 $userNumb, 아동 $fMember",
-//                )
-//            }
-//        } else {
     Column(
         modifier = modifier.fillMaxWidth()
             .border(
@@ -199,7 +171,6 @@ fun CustomSearchBox(
             onSearch = {
                 onSearch()
             },
-            isLandScape = false,
             isSearch = isSearch,
             categoryName = categoryName
 
@@ -218,7 +189,6 @@ fun CustomSearchBox(
             personValue = "객실 $roomNumb, 성인 $userNumb, 아동 $fMember"
         )
     }
-//        }
 }
 
 @Composable
@@ -296,7 +266,6 @@ fun DialogContent(
                         if (count성인 < 10) {
                             count성인++
                         }
-
                     },
                     onDecrease = {
                         if (count성인 <= 1) {
@@ -377,14 +346,12 @@ private fun DialogItem(
 private fun SearchBox(
     modifier: Modifier = Modifier,
     onSearch: () -> Unit,
-    isLandScape: Boolean,
     isSearch: Boolean,
     categoryName: String? = null
 ) {
     var text by remember { mutableStateOf("") }
     Row(
         modifier = Modifier.fillMaxWidth()
-            .showBorder(isLandScape)
             .clip(RoundedCornerShape(8.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -402,18 +369,20 @@ private fun SearchBox(
                         contentDescription = null,
                         modifier = Modifier.size(26.dp)
                     )
-                    if (isSearch && categoryName?.isNotEmpty() == true) {
+                    if (!isSearch) {
                         Text(
                             text = categoryName ?: "",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.background(
-                                MaterialTheme.colorScheme.outlineVariant
-                            ).padding(8.dp)
+                                MaterialTheme.colorScheme.outlineVariant.copy(.8f),
+                                shape = RoundedCornerShape(8.dp)
+                            ).clip(RoundedCornerShape(8.dp))
                         )
                     }
                 }
 
             },
+            maxLines = 1,
             colors = TextFieldDefaults.colors(
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
@@ -421,16 +390,17 @@ private fun SearchBox(
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             ),
             placeholder = {
-                Text("도시, 명소, 숙소명으로 찾아보세요")
+                Text("도시, 명소, 숙소명으로 찾아보세요", overflow = TextOverflow.Ellipsis)
             },
-            modifier = modifier.isSearch(
-                isSearch,
-                onClick = {
-                    if (isSearch) {
-                        onSearch()
+            modifier = modifier
+                .height(56.dp).isSearch(
+                    isSearch,
+                    onClick = {
+                        if (isSearch) {
+                            onSearch()
+                        }
                     }
-                }
-            ),
+                ),
         )
 
     }
