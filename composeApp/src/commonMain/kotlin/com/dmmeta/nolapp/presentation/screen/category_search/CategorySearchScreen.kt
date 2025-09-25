@@ -12,11 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -35,6 +36,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBox
@@ -63,6 +65,18 @@ fun CategorySearchScreen(navHostController: NavHostController) {
 @Composable
 private fun CategorySearchContent(onBack: () -> Unit) {
     val focusRequester = remember { FocusRequester() }
+    val locationList = listOf(
+        LocationItem("Dhaka", "2025-09-24"),
+        LocationItem("Chattogram", "2025-09-25"),
+        LocationItem("Cox’s Bazar", "2025-09-26"),
+        LocationItem("Sylhet", "2025-09-27"),
+        LocationItem("Sundarbans", "2025-09-28"),
+        LocationItem("Rangamati", "2025-09-29"),
+        LocationItem("Bandarban", "2025-09-30"),
+        LocationItem("Khulna", "2025-10-01"),
+        LocationItem("Rajshahi", "2025-10-02"),
+        LocationItem("Kuakata", "2025-10-03")
+    )
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -77,10 +91,14 @@ private fun CategorySearchContent(onBack: () -> Unit) {
     var selectedIndex by remember { mutableStateOf(2) }
     var categoryName by remember { mutableStateOf(categories[selectedIndex].label) }
 
+    var textValue by remember { mutableStateOf("") }
+
+    val filterLocation = locationList.filter {
+        it.location.contains(textValue, ignoreCase = true)
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .verticalScroll(rememberScrollState())
     ) {
         CustomTopAppBar(
             navIcon = {
@@ -117,7 +135,11 @@ private fun CategorySearchContent(onBack: () -> Unit) {
             isSearch = false,
             onSearch = {},
             modifier = Modifier.padding(16.dp).focusRequester(focusRequester),
-            categoryName = categoryName
+            categoryName = categoryName,
+            onValueChange = {
+                textValue = it
+            },
+            value = textValue
         )
 
         Row(
@@ -130,28 +152,39 @@ private fun CategorySearchContent(onBack: () -> Unit) {
         }
 
 
-        SearchListTile(
-            locationName = "콕스 바자, 방글라데시",
-            dateInfo = "08.28-06.29-1박 객실 성인 2",
-            onCancel = {}
-        )
-        SearchListTile(
-            locationName = "콕스 바자, 방글라데시",
-            dateInfo = "08.28-06.29-1박 객실 성인 2",
-            onCancel = {}
-        )
-        SearchListTile(
-            locationName = "콕스 바자, 방글라데시",
-            dateInfo = "08.28-06.29-1박 객실 성인 2",
-            onCancel = {}
-        )
-        SearchListTile(
-            locationName = "콕스 바자, 방글라데시",
-            dateInfo = "08.28-06.29-1박 객실 성인 2",
-            onCancel = {}
-        )
+            LazyColumn {
+                items(filterLocation) {
+                    SearchListTile(
+                        locationName = it.location,
+                        dateInfo = it.date,
+                        onCancel = {}
+                    )
+                }
+            }
+
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "인기 검색어",
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                "2025.09.17 기준", style = MaterialTheme.typography.titleSmall.copy(
+                    color = MaterialTheme.colorScheme.onBackground.copy(.5f)
+                )
+            )
+        }
     }
 }
+
+data class LocationItem(
+    val location: String,
+    val date: String,
+)
 
 data class CategoryOption(
     val icon: Painter,

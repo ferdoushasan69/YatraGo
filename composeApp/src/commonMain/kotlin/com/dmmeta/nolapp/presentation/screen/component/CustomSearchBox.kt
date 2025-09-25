@@ -71,7 +71,9 @@ fun CustomSearchBox(
     onSearch: () -> Unit,
     isSearch: Boolean,
     modifier: Modifier = Modifier,
-    categoryName: String? = null
+    categoryName: String? = null,
+    onValueChange : (String)-> Unit ={},
+    value : String? = null
 ) {
     val now = Clock.System.now().toEpochMilliseconds()
     val onDaysMils = 1.days.inWholeMilliseconds
@@ -91,51 +93,14 @@ fun CustomSearchBox(
         endMils = selectedRange.second ?: 0
     )
     if (showDialog) {
-        val dateRangePickerState = rememberDateRangePickerState(
-            selectableDates = object : SelectableDates {
-                override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                    val today = Clock.System.now().toEpochMilliseconds()
-                    return utcTimeMillis >= today
-                }
-            }
-        )
 
-        DatePickerDialog(
-
-            onDismissRequest = { showDialog = false },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        selectedRange = dateRangePickerState.selectedStartDateMillis to
-                                dateRangePickerState.selectedEndDateMillis
-                        showDialog = false
-                    },
-                    enabled = dateRangePickerState.selectedStartDateMillis != null &&
-                            dateRangePickerState.selectedEndDateMillis != null
-                ) {
-                    Text("OK")
+            DateRangePickerDialog(
+                onDismiss = { showDialog = false },
+                onConfirm = { startMillis, endMillis ->
+                    selectedRange = startMillis to endMillis
+                    showDialog = false
                 }
-            },
-
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        ) {
-            DateRangePicker(
-                title = {
-                    Text(
-                        "날짜 선택",
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-                    )
-                },
-                state = dateRangePickerState,
-                modifier = Modifier.height(500.dp)
             )
-        }
     }
 
     if (showUserDialogue) {
@@ -172,8 +137,9 @@ fun CustomSearchBox(
                 onSearch()
             },
             isSearch = isSearch,
-            categoryName = categoryName
-
+            categoryName = categoryName,
+            onValueChange = onValueChange,
+            value = value?:"",
         )
         HorizontalDivider()
         DateAndCountBox(
@@ -347,7 +313,9 @@ private fun SearchBox(
     modifier: Modifier = Modifier,
     onSearch: () -> Unit,
     isSearch: Boolean,
-    categoryName: String? = null
+    categoryName: String? = null,
+    onValueChange : (String)-> Unit,
+    value : String
 ) {
     var text by remember { mutableStateOf("") }
     Row(
@@ -357,11 +325,9 @@ private fun SearchBox(
     ) {
 
         TextField(
-            onValueChange = {
-                text = it
-            },
+            onValueChange =onValueChange,
             singleLine = true,
-            value = text,
+            value = value,
             prefix = {
                 Row(modifier = Modifier) {
                     Icon(
@@ -374,7 +340,7 @@ private fun SearchBox(
                             text = categoryName ?: "",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.background(
-                                MaterialTheme.colorScheme.outlineVariant.copy(.8f),
+                                MaterialTheme.colorScheme.surfaceDim.copy(.5f),
                                 shape = RoundedCornerShape(8.dp)
                             ).clip(RoundedCornerShape(8.dp))
                         )

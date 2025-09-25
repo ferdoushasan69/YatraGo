@@ -8,8 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
+
 @Composable
-fun SearchScreen(navController: NavHostController) {
+fun SearchScreen(navHostController: NavHostController) {
     SearchContent()
 }
 

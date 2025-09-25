@@ -7,13 +7,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +45,6 @@ fun AppBottomNavigationBar(
     selectedContentColor: Color = PrimaryColor,
     unSelectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
 ) {
-
-
     val items = listOf(
         BottomNavItem(
             label = "검색",
@@ -91,42 +83,40 @@ fun AppBottomNavigationBar(
     val bottomNavBarDestination = Screen.Home::class.qualifiedName!!
 
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(containerColor),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
             BottomNavItemView(
                 modifier = Modifier.weight(1f),
                 item = item,
                 isSelected = currentRoute == item.route,
-                unSelectedContentColor = unSelectedContentColor,
                 selectedContentColor = selectedContentColor,
+                unSelectedContentColor = unSelectedContentColor,
                 onClick = {
                     if (currentRoute != item.route) {
                         navController.navigate(item.route) {
-                            popUpTo(bottomNavBarDestination) {
-                                saveState = true
-                            }
+                            popUpTo(bottomNavBarDestination) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
                     }
-                },
+                }
             )
         }
     }
 }
-
 
 @Composable
 fun BottomNavItemView(
     modifier: Modifier = Modifier,
     item: BottomNavItem,
     isSelected: Boolean,
-    unSelectedContentColor: Color,
     selectedContentColor: Color,
+    unSelectedContentColor: Color,
     onClick: () -> Unit,
 ) {
     val scale by animateFloatAsState(
@@ -145,14 +135,11 @@ fun BottomNavItemView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(12.dp))
+
         Image(
             painter = if (isSelected) item.selectedIcon else item.unSelectedIcon,
             contentDescription = item.label,
-            colorFilter = if (!isSelected) ColorFilter.tint(unSelectedContentColor) else ColorFilter.tint(
-                PrimaryColor
-            ),
-            modifier = Modifier
-
+            colorFilter = ColorFilter.tint(contentColor),
         )
 
         Spacer(modifier = Modifier.height(4.dp))

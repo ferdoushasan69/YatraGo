@@ -229,7 +229,7 @@ fun CategorySection(onCategoryItemClick: (String) -> Unit) {
             icon = painterResource(Res.drawable.travel)
         ),
         Item(
-            itemName = "해외 투어·티켓",
+            itemName = "투어·티켓",
             icon = painterResource(Res.drawable.tower)
         ),
         Item(
@@ -237,19 +237,19 @@ fun CategorySection(onCategoryItemClick: (String) -> Unit) {
             icon = painterResource(Res.drawable.charaki)
         ),
         Item(
-            itemName = "공연/전시",
+            itemName = "공연",
             icon = painterResource(Res.drawable.concert)
         ),
         Item(
-            itemName = "호텔/리조트",
+            itemName = "호텔",
             icon = painterResource(Res.drawable.hotel)
         ),
         Item(
-            itemName = "펜션/풀빌라",
+            itemName = "펜션",
             icon = painterResource(Res.drawable.pention)
         ),
         Item(
-            itemName = "글램핑/카라반/캠핑",
+            itemName = "글램핑",
             icon = painterResource(Res.drawable.camping)
         ),
         Item(
