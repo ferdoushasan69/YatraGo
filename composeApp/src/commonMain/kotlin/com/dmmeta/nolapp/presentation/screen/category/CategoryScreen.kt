@@ -1,5 +1,6 @@
 package com.dmmeta.nolapp.presentation.screen.category
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,15 +23,19 @@ import com.dmmeta.nolapp.presentation.screen.component.CustomBannerSection
 import com.dmmeta.nolapp.presentation.screen.component.CustomSearchBox
 import com.dmmeta.nolapp.presentation.screen.component.CustomTopAppBar
 import nolapp.composeapp.generated.resources.Res
-import nolapp.composeapp.generated.resources.ic_cart
 import nolapp.composeapp.generated.resources.ic_back
+import nolapp.composeapp.generated.resources.ic_cart
 import nolapp.composeapp.generated.resources.search
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun CategoryScreen(categoryName: String, navHostController: NavHostController) {
+fun CategoryScreen(
+    categoryName: String,
+    navHostController: NavHostController,
+) {
     CategoryContent(categoryName = categoryName, onBack = {
         navHostController.navigateUp()
+
     }, onSearch = {
         navHostController.navigate(Screen.CategorySelection) {
             launchSingleTop = true
@@ -96,11 +101,13 @@ fun CategoryContent(
             )
         )
 
-        CustomSearchBox(
-            onSearch = onSearchBoxClick,
-            modifier = Modifier,
-            isSearch = true
-        )
+        Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+            CustomSearchBox(
+                onSearch = onSearchBoxClick,
+                modifier = Modifier,
+                isSearch = true
+            )
+        }
         Spacer(Modifier.height(8.dp))
         CustomBannerSection {
             onBannerList()

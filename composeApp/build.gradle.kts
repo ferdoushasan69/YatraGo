@@ -5,8 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-
-    kotlin("plugin.serialization") version "2.1.21"
+    alias(libs.plugins.kotlinx.serialization)
 
 }
 
@@ -35,6 +34,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.play.services.location)
             implementation(libs.play.services.maps)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -69,9 +69,9 @@ kotlin {
             implementation(libs.coil.compose)
 
             //Navigation
-            implementation(libs.androidx.navigation.compose)
+            implementation(libs.navigation.compose)
 
-            //Date time
+
             implementation(libs.kotlinx.datetime)
 
             //DataStore

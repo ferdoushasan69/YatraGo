@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -30,9 +29,9 @@ import nolapp.composeapp.generated.resources.ic_back
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun BannerListScreen(navController: NavHostController) {
+fun BannerListScreen(navHostController: NavHostController) {
     BannerListContent(onBack = {
-        navController.navigateUp()
+        navHostController.navigateUp()
     })
 }
 

@@ -30,24 +30,16 @@ import com.dmmeta.nolapp.presentation.screen.map.MapScreen
 import com.dmmeta.nolapp.presentation.screen.search.SearchScreen
 import com.dmmeta.nolapp.presentation.screen.view_all_banner.BannerListScreen
 
-
 @Composable
 fun AppNavigation(navController: NavHostController) {
-
     val backStackEntry by navController.currentBackStackEntryAsState()
-
     val currentRoute = remember(backStackEntry) {
         backStackEntry?.destination?.route?.substringBefore("?")?.substringBefore("/")
     }
 
-    val topBarScreen = remember {
-        setOf(Screen.Home::class.qualifiedName)
-    }
-    val fullScreens = remember {
-        setOf(Screen.Home::class.qualifiedName)
-    }
-
-    val bottomScreen = remember {
+    val topBarScreens = remember { setOf(Screen.Home::class.qualifiedName) }
+    val fullScreens = remember { setOf(Screen.Home::class.qualifiedName) }
+    val bottomScreens = remember {
         setOf(
             Screen.Search::class.qualifiedName,
             Screen.Map::class.qualifiedName,
@@ -56,72 +48,46 @@ fun AppNavigation(navController: NavHostController) {
             Screen.Profile::class.qualifiedName
         )
     }
+
     val isFullScreen = remember(currentRoute) { currentRoute in fullScreens }
-    val showBottomBar = remember(currentRoute) { currentRoute in bottomScreen }
+    val showBottomBar = remember(currentRoute) { currentRoute in bottomScreens }
 
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
-                AppBottomNavigationBar(
-                    navController = navController
-                )
+                AppBottomNavigationBar(navController = navController)
             }
-
         }
     ) { innerPadding ->
-        val animatedPadding by animateDpAsState(
+        val animatedTopPadding by animateDpAsState(
             targetValue = if (!isFullScreen) innerPadding.calculateTopPadding() else 0.dp,
-            animationSpec = tween(
-                durationMillis = 250,
-                easing = FastOutSlowInEasing
-            ),
+            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
             label = "top_padding"
         )
-
         val animatedBottomPadding by animateDpAsState(
             targetValue = if (!isFullScreen) innerPadding.calculateBottomPadding() else 0.dp,
-            animationSpec = tween(
-                durationMillis = 250,
-                easing = FastOutSlowInEasing
-            ),
+            animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
             label = "bottom_padding"
         )
+
         Box(
-            modifier = Modifier.fillMaxSize()
-                .padding(
-                    top = animatedPadding,
-                    bottom = animatedBottomPadding
-                )
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = animatedTopPadding, bottom = animatedBottomPadding)
         ) {
             NavHost(
                 navController = navController,
                 modifier = Modifier.fillMaxSize(),
-                enterTransition = {
-                    fadeIn(
-                        animationSpec = tween(
-                            durationMillis = 300,
-                        )
-                    )
-                },
-                exitTransition = {
-                    fadeOut(
-                        animationSpec = tween(
-                            durationMillis = 300,
-                        )
-                    )
-                },
-
                 startDestination = Screen.Home,
+                enterTransition = { fadeIn(animationSpec = tween(durationMillis = 300)) },
+                exitTransition = { fadeOut(animationSpec = tween(durationMillis = 300)) }
             ) {
-                composable<Screen.Home> {
-                    HomeScreen(navController)
-                }
+                composable<Screen.Home> { HomeScreen(navController) }
+
                 composable<Screen.Category> {
                     val args = it.toRoute<Screen.Category>()
-
                     CategoryScreen(
-                        categoryName = args.categoryName,
-                        navHostController = navController
+                        categoryName = args.categoryName, navHostController = navController,
                     )
                 }
 
@@ -129,14 +95,11 @@ fun AppNavigation(navController: NavHostController) {
                     CategorySearchScreen(navHostController = navController)
                 }
 
-
                 composable<Screen.ViewAllBanner> {
                     BannerListScreen(navController)
                 }
 
-                composable<Screen.Search> {
-                    SearchScreen(navController)
-                }
+                composable<Screen.Search> { SearchScreen(navController) }
 
                 composable<Screen.Map> {
                     KeepAlive { MapScreen(navController) }
@@ -147,18 +110,16 @@ fun AppNavigation(navController: NavHostController) {
                         Text("Favorite")
                     }
                 }
+
                 composable<Screen.Profile> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("Profile")
                     }
                 }
             }
-
         }
-
     }
 }
-
 
 @Composable
 fun KeepAlive(content: @Composable () -> Unit) {

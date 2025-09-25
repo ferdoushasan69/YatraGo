@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -76,7 +77,6 @@ fun PlayerBox(
         }
     }
 
-    //Drag / tap handling
     var isDragging by remember { mutableStateOf(false) }
     var dragX by remember { mutableStateOf(0f) }
 
@@ -105,7 +105,6 @@ fun PlayerBox(
                 )
             }
 
-            //CustomSlider
             Box(
                 modifier = Modifier.weight(1f)
                     .height(16.dp)
@@ -177,14 +176,14 @@ private fun CustomAddButton(
 ) {
     Row(
         modifier = Modifier
-            .padding(3.dp)
+            .padding(horizontal = 8.dp)
             .background(
-                color = MaterialTheme.colorScheme.primary.copy(.1f),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(.2f),
                 shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
-            .padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 2.dp), verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "$currentPage / $pageSize",
@@ -193,7 +192,8 @@ private fun CustomAddButton(
         )
         Icon(
             painterResource(Res.drawable.ic_add),
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(16.dp).offset(x = -5.dp)
         )
     }
 }
