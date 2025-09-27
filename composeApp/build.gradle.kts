@@ -86,11 +86,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.dmmeta.nolapp"
+    namespace = "com.dmmeta.yatrago"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.dmmeta.nolapp"
+        applicationId = "com.dmmeta.yatrago"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

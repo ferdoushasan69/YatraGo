@@ -1,4 +1,4 @@
-rootProject.name = "NOLApp"
+rootProject.name = "YatraGo"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
