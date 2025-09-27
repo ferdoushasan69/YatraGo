@@ -311,7 +311,6 @@ private fun SearchBox(
     onValueChange: (String) -> Unit,
     value: String
 ) {
-    var text by remember { mutableStateOf("") }
     Row(
         modifier = Modifier.fillMaxWidth()
             .clip(RoundedCornerShape(8.dp)),
@@ -333,6 +332,7 @@ private fun SearchBox(
                         Text(
                             text = categoryName ?: "",
                             style = MaterialTheme.typography.titleMedium,
+                            color = PrimaryColor,
                             modifier = Modifier.background(
                                 MaterialTheme.colorScheme.surfaceDim.copy(.5f),
                                 shape = RoundedCornerShape(8.dp)

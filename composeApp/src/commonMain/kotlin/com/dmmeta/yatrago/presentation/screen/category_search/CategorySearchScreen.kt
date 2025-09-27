@@ -51,19 +51,28 @@ import yatrago.composeapp.generated.resources.ic_mic
 import yatrago.composeapp.generated.resources.ic_park
 import yatrago.composeapp.generated.resources.tower
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CategorySearchScreen(navHostController: NavHostController) {
+fun CategorySearchScreen(
+    navHostController: NavHostController,
+    viewModel: CategorySearchViewModel = koinViewModel()
+) {
+
 
     CategorySearchContent(
         onBack = {
             navHostController.navigateUp()
-        }
+        },
+        viewModel = viewModel
     )
 }
 
 @Composable
-private fun CategorySearchContent(onBack: () -> Unit) {
+private fun CategorySearchContent(
+    onBack: () -> Unit,
+    viewModel: CategorySearchViewModel
+) {
     val focusRequester = remember { FocusRequester() }
     val locationList = listOf(
         LocationItem("Dhaka", "2025-09-24"),
@@ -93,9 +102,6 @@ private fun CategorySearchContent(onBack: () -> Unit) {
 
     var textValue by remember { mutableStateOf("") }
 
-    val filterLocation = locationList.filter {
-        it.location.contains(textValue, ignoreCase = true)
-    }
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -133,11 +139,14 @@ private fun CategorySearchContent(onBack: () -> Unit) {
 
         CustomSearchBox(
             isSearch = false,
-            onSearch = {},
+            onSearch = {
+            },
             modifier = Modifier.padding(16.dp).focusRequester(focusRequester),
             categoryName = categoryName,
             onValueChange = {
                 textValue = it
+                viewModel.onSearch(query = textValue,locationList)
+
             },
             value = textValue
         )
@@ -152,17 +161,13 @@ private fun CategorySearchContent(onBack: () -> Unit) {
         }
 
 
-        LazyColumn {
-            items(filterLocation) {
-                SearchListTile(
-                    locationName = it.location,
-                    dateInfo = it.date,
-                    onCancel = {}
-                )
-            }
+        viewModel.recentSearch.forEach {item ->
+            SearchListTile(
+                locationName = item.location,
+                dateInfo = item.date,
+                onCancel = {viewModel.removeSearch(item)}
+            )
         }
-
-
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
