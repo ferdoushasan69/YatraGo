@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		12F2FD30F72FA69768E8F886 /* NOLApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NOLApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		12F2FD30F72FA69768E8F886 /* YatraGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YatraGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		ABF2FB1EBDBF838E5EABE272 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		ABF2FB1EBDBF838E5EABE272 /* Exceptions for "iosApp" folder in "iosApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		27FD37F0C330513A4F39F75E /* iosApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				ABF2FB1EBDBF838E5EABE272 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				ABF2FB1EBDBF838E5EABE272 /* Exceptions for "iosApp" folder in "iosApp" target */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -50,7 +50,7 @@
 		7ED269085F945C7B974F8008 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				12F2FD30F72FA69768E8F886 /* NOLApp.app */,
+				12F2FD30F72FA69768E8F886 /* YatraGo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,7 +87,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = 12F2FD30F72FA69768E8F886 /* NOLApp.app */;
+			productReference = 12F2FD30F72FA69768E8F886 /* YatraGo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -299,7 +299,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = JR8JXMTK6V;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../composeApp/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)\"";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -328,7 +328,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
-				DEVELOPMENT_TEAM = "${TEAM_ID}";
+				DEVELOPMENT_TEAM = JR8JXMTK6V;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/../composeApp/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)\"";
 				GENERATE_INFOPLIST_FILE = YES;

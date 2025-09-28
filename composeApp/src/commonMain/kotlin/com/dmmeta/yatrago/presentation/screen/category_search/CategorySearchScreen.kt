@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -37,12 +35,15 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.dmmeta.yatrago.presentation.screen.component.CustomSearchBox
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.presentation.screen.component.SearchListTile
 import com.dmmeta.yatrago.presentation.theme.PrimaryColor
+import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 import yatrago.composeapp.generated.resources.Res
 import yatrago.composeapp.generated.resources.ic_apertment
 import yatrago.composeapp.generated.resources.ic_back
@@ -50,8 +51,6 @@ import yatrago.composeapp.generated.resources.ic_flight
 import yatrago.composeapp.generated.resources.ic_mic
 import yatrago.composeapp.generated.resources.ic_park
 import yatrago.composeapp.generated.resources.tower
-import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CategorySearchScreen(
@@ -102,6 +101,8 @@ private fun CategorySearchContent(
 
     var textValue by remember { mutableStateOf("") }
 
+    val filteredResults = viewModel.filterResult
+    val isSearchEmpty = viewModel.isSearchEmpty
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -145,29 +146,71 @@ private fun CategorySearchContent(
             categoryName = categoryName,
             onValueChange = {
                 textValue = it
-                viewModel.onSearch(query = textValue,locationList)
-
+                viewModel.onSearch(query = textValue, locationList)
             },
             value = textValue
         )
 
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "최근 검색", style = MaterialTheme.typography.titleMedium)
-            Text(text = "$categoryName", style = MaterialTheme.typography.titleMedium)
+        if (textValue.isNotBlank()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Search Results",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+
+                if (isSearchEmpty) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "No items found for \"$textValue\"",
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                ),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                } else {
+                    filteredResults.forEach { item ->
+                        SearchListTile(
+                            locationName = item.location,
+                            dateInfo = item.date,
+                            onCancel = { },
+                        )
+                    }
+                }
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "최근 검색", style = MaterialTheme.typography.titleMedium)
+                Text(text = "$categoryName", style = MaterialTheme.typography.titleMedium)
+            }
+
+            viewModel.recentSearch.take(3).forEach { item ->
+                SearchListTile(
+                    locationName = item.location,
+                    dateInfo = item.date,
+                    onCancel = { viewModel.removeSearch(item) }
+                )
+            }
         }
 
-
-        viewModel.recentSearch.forEach {item ->
-            SearchListTile(
-                locationName = item.location,
-                dateInfo = item.date,
-                onCancel = {viewModel.removeSearch(item)}
-            )
-        }
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
