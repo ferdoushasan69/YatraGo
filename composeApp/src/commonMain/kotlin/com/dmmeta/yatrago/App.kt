@@ -1,16 +1,10 @@
 package com.dmmeta.yatrago
 
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.dmmeta.yatrago.presentation.navigation.AppNavigation
+import com.dmmeta.yatrago.presentation.theme.AppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -20,12 +14,7 @@ fun App(
 ) {
 
     val navHostController = rememberNavController()
-//    AppTheme(isDarkMode = isDarkMode) {
-    MaterialTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Welcome", color = Color.Black)
-        }
-
+    AppTheme(isDarkMode = isDarkMode) {
         AppNavigation(navController = navHostController)
     }
 }
