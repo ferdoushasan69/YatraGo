@@ -10,7 +10,7 @@ fun MainViewController() = ComposeUIViewController(
         initKoin()
     }
 ) {
-    var isDarkMode =
+    val isDarkMode =
         UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyle.UIUserInterfaceStyleDark
     App(isDarkMode = isDarkMode)
 }

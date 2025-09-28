@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -106,6 +108,7 @@ private fun CategorySearchContent(
 
     Column(
         modifier = Modifier.fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
         CustomTopAppBar(
             navIcon = {
@@ -187,7 +190,7 @@ private fun CategorySearchContent(
                         SearchListTile(
                             locationName = item.location,
                             dateInfo = item.date,
-                            onCancel = { },
+                            onCancel = {},
                         )
                     }
                 }
@@ -226,7 +229,75 @@ private fun CategorySearchContent(
                 )
             )
         }
+
+        val destList = DestList()
+
+
+        destList.chunked(2).forEach { rowItem ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                rowItem.forEach { item ->
+
+                    DestinationItem(
+                        count = item.id,
+                        cityName = item.cityKo,
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (rowItem.size == 1) {
+                        Spacer(Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+
     }
+}
+
+@Composable
+fun DestinationItem(count: Int, cityName: String, modifier: Modifier) {
+    Row(
+        modifier = modifier.fillMaxWidth().padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = "$count -",
+            style = MaterialTheme.typography.titleMedium,
+            color = if (count <= 3) PrimaryColor else MaterialTheme.colorScheme.onBackground.copy(
+                .5f
+            )
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(text = cityName, style = MaterialTheme.typography.titleSmall)
+    }
+}
+
+data class Destination(
+    val id: Int,
+    val cityKo: String,
+    val cityEn: String,
+    val countryKo: String,
+    val countryEn: String
+)
+
+fun DestList(): List<Destination> {
+    return listOf(
+        Destination(1, "오사카", "Osaka", "일본", "Japan"),
+        Destination(2, "후쿠오카", "Fukuoka", "일본", "Japan"),
+        Destination(3, "후쿠오카", "Fukuoka", "일본", "Japan"),
+        Destination(4, "오사카", "Osaka", "일본", "Japan"),
+        Destination(5, "다낭", "Da Nang", "베트남", "Vietnam"),
+        Destination(6, "도쿄", "Tokyo", "일본", "Japan"),
+        Destination(7, "괌", "Guam", "괌(미국)", "Guam (US)"),
+        Destination(8, "나트랑", "Nha Trang", "베트남", "Vietnam"),
+        Destination(9, "도쿄", "Tokyo", "일본", "Japan"),
+        Destination(10, "다낭", "Da Nang", "베트남", "Vietnam")
+    )
+
 }
 
 data class LocationItem(

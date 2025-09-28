@@ -3,6 +3,7 @@ agp = "8.10.1"
 android-compileSdk = "36"
 android-minSdk = "24"
 android-targetSdk = "36"
+androidDriver = "2.1.0"
 androidx-activity = "1.10.1"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.17.0"
@@ -27,6 +28,7 @@ navigationComposeVersion = "2.9.0"
 playServicesMaps = "19.2.0"
 playServicesLocation = "21.3.0"
 [libraries]
+android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "androidDriver" }
 androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastoreCore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastoreCore" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -61,6 +63,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 
 #kotlinx serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "androidDriver" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
@@ -72,3 +75,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.2.20" }
+sqlDelight = { id = "app.cash.sqldelight", version.ref = "androidDriver" }
