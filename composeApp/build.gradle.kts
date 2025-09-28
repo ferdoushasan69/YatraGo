@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.sqlDelight)
 
 }
 
@@ -35,9 +36,14 @@ kotlin {
             implementation(libs.play.services.location)
             implementation(libs.play.services.maps)
 
+            //sqlDelight
+            implementation(libs.android.driver)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.native.driver)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -116,3 +122,10 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+sqldelight{
+    databases{
+        create("PostDatabase"){
+            packageName.set("com.dmmeta.yatrago.database")
+        }
+    }
+}

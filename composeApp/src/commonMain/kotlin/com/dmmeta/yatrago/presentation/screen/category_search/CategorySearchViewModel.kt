@@ -33,7 +33,7 @@ class CategorySearchViewModel : ViewModel() {
 
         val filter = locations.filter {
             it.location.contains(query, ignoreCase = true)
-        }.take(3)
+        }.take(2)
 
         _filterResult.clear()
         _filterResult.addAll(filter)
@@ -49,7 +49,7 @@ class CategorySearchViewModel : ViewModel() {
         _recentSearch.remove(location)
         _recentSearch.add(0, location)
 
-        if (_recentSearch.size > 3) {
+        if (_recentSearch.size > 2) {
             _recentSearch.removeAt(recentSearch.lastIndex)
         }
     }
