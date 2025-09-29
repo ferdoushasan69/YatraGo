@@ -16,9 +16,9 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.dmmeta.yatrago.presentation.theme.SearchBarColor
+import org.jetbrains.compose.resources.painterResource
 import yatrago.composeapp.generated.resources.Res
 import yatrago.composeapp.generated.resources.search
-import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,13 +26,14 @@ fun CustomSearchBar(
     onValueChange: (String) -> Unit,
     value: String,
     isSearch: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     TextField(
         placeholder = {
             Text(text = "무엇을 찾아드릴까요?", color = Color.White.copy(.7f))
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(
                 8.dp

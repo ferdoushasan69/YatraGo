@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.dmmeta.yatrago.presentation.navigation.Screen
 import com.dmmeta.yatrago.presentation.screen.component.CustomSearchBox
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.presentation.screen.component.SearchListTile
@@ -65,14 +66,18 @@ fun CategorySearchScreen(
         onBack = {
             navHostController.navigateUp()
         },
-        viewModel = viewModel
+        viewModel = viewModel,
+        onSearch = {
+            navHostController.navigate(Screen.Search(it))
+        }
     )
 }
 
 @Composable
 private fun CategorySearchContent(
     onBack: () -> Unit,
-    viewModel: CategorySearchViewModel
+    viewModel: CategorySearchViewModel,
+    onSearch :(String)-> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     val locationList = listOf(
@@ -143,8 +148,7 @@ private fun CategorySearchContent(
 
         CustomSearchBox(
             isSearch = false,
-            onSearch = {
-            },
+            onSearch = onSearch,
             modifier = Modifier.padding(16.dp).focusRequester(focusRequester),
             categoryName = categoryName,
             onValueChange = {

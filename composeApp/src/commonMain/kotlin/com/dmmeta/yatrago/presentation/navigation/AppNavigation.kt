@@ -27,7 +27,7 @@ import com.dmmeta.yatrago.presentation.screen.category_search.CategorySearchScre
 import com.dmmeta.yatrago.presentation.screen.component.AppBottomNavigationBar
 import com.dmmeta.yatrago.presentation.screen.home.HomeScreen
 import com.dmmeta.yatrago.presentation.screen.map.MapScreen
-import com.dmmeta.yatrago.presentation.screen.search.SearchScreen
+import com.dmmeta.yatrago.presentation.screen.search_result.SearchResultScreen
 import com.dmmeta.yatrago.presentation.screen.view_all_banner.BannerListScreen
 
 @Composable
@@ -41,7 +41,7 @@ fun AppNavigation(navController: NavHostController) {
     val fullScreens = remember { setOf(Screen.Home::class.qualifiedName) }
     val bottomScreens = remember {
         setOf(
-            Screen.Search::class.qualifiedName,
+            Screen.SearchFilter::class.qualifiedName,
             Screen.Map::class.qualifiedName,
             Screen.Home::class.qualifiedName,
             Screen.Favorite::class.qualifiedName,
@@ -99,8 +99,16 @@ fun AppNavigation(navController: NavHostController) {
                     BannerListScreen(navController)
                 }
 
-                composable<Screen.Search> { SearchScreen(navController) }
+                composable<Screen.Search> {
+                    val args = it.toRoute<Screen.Search>().query
+                    SearchResultScreen(navController, query = args)
+                }
 
+                composable<Screen.SearchFilter> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("SearchFilter")
+                    }
+                }
                 composable<Screen.Map> {
                     KeepAlive { MapScreen(navController) }
                 }

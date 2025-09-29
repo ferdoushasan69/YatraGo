@@ -1,0 +1,407 @@
+package com.dmmeta.yatrago.presentation.screen.search_result
+
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.dmmeta.yatrago.presentation.navigation.Screen
+import com.dmmeta.yatrago.presentation.screen.component.AccommodationListCard
+import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
+import org.jetbrains.compose.resources.painterResource
+import yatrago.composeapp.generated.resources.Res
+import yatrago.composeapp.generated.resources.calender_date_picker
+import yatrago.composeapp.generated.resources.ic_back
+import yatrago.composeapp.generated.resources.ic_check
+import yatrago.composeapp.generated.resources.ic_filter
+import yatrago.composeapp.generated.resources.ic_home
+import yatrago.composeapp.generated.resources.ic_search_close
+import yatrago.composeapp.generated.resources.ic_swap
+
+
+@Composable
+fun SearchResultScreen(navHostController: NavHostController, query: String) {
+    SearchContent(
+        onBack = {
+            navHostController.navigateUp()
+        },
+        query = query,
+        goHome = {
+            navHostController.navigate(Screen.Home)
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
+    var textValue by remember { mutableStateOf(query) }
+    var selected by remember { mutableStateOf(0) }
+    val categories = listOf(
+        "국내숙소",
+        "국내레저",
+        "공연/전시",
+        "해외숙소",
+        "해외투어티켓",
+        "항공"
+    )
+    val sheetState = rememberModalBottomSheetState()
+    var showFilterBottomSheet by remember { mutableStateOf(false) }
+
+    if (showFilterBottomSheet) {
+        FilterBottomSheet(
+            onDismissRequest = {
+                showFilterBottomSheet = false
+            },
+            modifier = Modifier.fillMaxWidth(),
+            sheetState = sheetState
+        )
+    }
+    Column(modifier = Modifier.fillMaxSize()) {
+        CustomSearchBar(
+            onValueChange = {
+                textValue = it
+            },
+            value = textValue,
+            onClear = { textValue = "" },
+            onBack = onBack,
+            goHome = goHome
+        )
+        LazyRow(modifier = Modifier.fillMaxWidth(), contentPadding = PaddingValues(8.dp)) {
+            itemsIndexed(categories) { index, category ->
+
+                CategoryItem(
+                    modifier = Modifier.padding(8.dp),
+                    category = category,
+                    onClick = {
+                        selected = index
+                    },
+                    selected = selected == index
+                )
+            }
+        }
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 18.dp),
+            color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CustomOutlineButton(
+                modifier = Modifier.weight(1f),
+                painter = painterResource(Res.drawable.calender_date_picker),
+                buttonText = "09.17~09.18 · 객실 1, 2명",
+                onClick = {},
+                textStyle = MaterialTheme.typography.titleSmall,
+                iconTint = MaterialTheme.colorScheme.onBackground
+
+            )
+            Spacer(Modifier.width(8.dp))
+            CustomOutlineButton(
+                modifier = Modifier,
+                painter = painterResource(Res.drawable.ic_filter),
+                buttonText = "필터",
+                onClick = {
+                    showFilterBottomSheet = true
+                },
+                textStyle = MaterialTheme.typography.titleSmall,
+                iconTint = MaterialTheme.colorScheme.onBackground
+
+            )
+            Spacer(Modifier.width(8.dp))
+
+            CustomOutlineButton(
+                modifier = Modifier,
+                painter = painterResource(Res.drawable.ic_swap),
+                buttonText = "정렬",
+                onClick = {},
+                textStyle = MaterialTheme.typography.titleSmall,
+                iconTint = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+        Row(modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
+            CustomFutureBadgeButton(
+                text = "조식포함",
+                onClick = {}
+            )
+            CustomFutureBadgeButton(text = "무료취소", onClick = {})
+            CustomFutureBadgeButton(text = "예약가능", onClick = {})
+        }
+        val count by remember { mutableStateOf(5) }
+        LazyColumn {
+            items(count) {
+                AccommodationListCard()
+
+                if (count != it + 1) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(horizontal = 18.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilterBottomSheet(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+    sheetState: SheetState
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface,
+        content = {
+            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+                Text(
+                    text = "필터",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text("자주 찾는 필터", style = MaterialTheme.typography.titleMedium)
+
+                FilterItem()
+                HorizontalDivider(
+                    modifier = Modifier,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)
+                )
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilterItem(modifier: Modifier = Modifier) {
+    val list = listOf(
+        "예약 가능한 숙소",
+        "조식 포함",
+        "무료 와이파이",
+        "무료 취소 가능 숙소",
+        "NO.1 특가 가능 숙소"
+    )
+    var selectedItem by remember { mutableStateOf(setOf<Int>()) }
+    list.forEachIndexed { index, string ->
+        Row(
+            modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(string)
+            CustomCheckbox(
+                checked = index in selectedItem,
+                onCheckedChange = { isChecked ->
+                    selectedItem = if (isChecked) selectedItem + index else selectedItem - index
+                },
+                modifier = Modifier,
+            )
+        }
+    }
+
+}
+
+
+@Composable
+fun CustomCheckbox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val checkboxColor by animateColorAsState(
+        targetValue = if (checked) Color(0xFF3B82F6) else Color.White,
+        label = "checkboxColor"
+    )
+
+    val borderColor by animateColorAsState(
+        targetValue = if (checked) MaterialTheme.colorScheme.outlineVariant.copy(.1f) else MaterialTheme.colorScheme.outlineVariant.copy(
+            .7f
+        ),
+        label = "borderColor"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (checked) 1f else 0f,
+        label = "checkScale"
+    )
+
+    Row(
+        modifier = modifier
+            .padding(8.dp)
+            .clickable { onCheckedChange(!checked) },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(22.dp)
+                .background(
+                    color = checkboxColor,
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(4.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painterResource(Res.drawable.ic_check),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .size(16.dp)
+                    .scale(scale)
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun CategoryItem(
+    modifier: Modifier = Modifier,
+    category: String,
+    onClick: () -> Unit,
+    selected: Boolean
+) {
+    Box(
+        modifier = modifier.background(
+            if (selected) MaterialTheme.colorScheme.outline else Color.Transparent,
+            shape = RoundedCornerShape(20.dp)
+        )
+            .clip(RoundedCornerShape(20.dp))
+            .clickable {
+                onClick()
+            }
+            .padding(8.dp)
+    ) {
+        Text(
+            text = category,
+            style = MaterialTheme.typography.titleMedium,
+            color = if (selected) Color.White else MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+@Composable
+private fun CustomFutureBadgeButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick, colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.outlineVariant.copy(.2f)
+        ), modifier = modifier.padding(end = 8.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CustomSearchBar(
+    onValueChange: (String) -> Unit = {},
+    value: String = "",
+    onClear: () -> Unit,
+    onBack: () -> Unit,
+    goHome: () -> Unit
+) {
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = onBack) {
+            Icon(
+                painterResource(Res.drawable.ic_back),
+                contentDescription = null,
+                Modifier.size(24.dp)
+            )
+        }
+
+        TextField(
+            modifier = Modifier.weight(1f).height(56.dp).clip(RoundedCornerShape(16.dp)),
+            onValueChange = onValueChange,
+            suffix = {
+                Icon(
+                    painterResource(Res.drawable.ic_search_close),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp).clip(CircleShape).clickable { onClear() }
+                )
+            },
+            placeholder = { Text("Search here...") },
+            singleLine = true,
+            value = value, colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.outlineVariant.copy(.2f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.outlineVariant.copy(.2f),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+
+                )
+        )
+        IconButton(onClick = goHome) {
+            Icon(
+                painterResource(Res.drawable.ic_home),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+

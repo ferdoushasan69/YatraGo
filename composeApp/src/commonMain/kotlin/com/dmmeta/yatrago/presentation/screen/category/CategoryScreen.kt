@@ -103,7 +103,7 @@ fun CategoryContent(
 
         Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             CustomSearchBox(
-                onSearch = onSearchBoxClick,
+                onSearch = { onSearchBoxClick() },
                 modifier = Modifier,
                 isSearch = true
             )

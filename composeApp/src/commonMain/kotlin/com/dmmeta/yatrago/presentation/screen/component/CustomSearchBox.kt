@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -62,7 +65,7 @@ import kotlin.time.Instant
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun CustomSearchBox(
-    onSearch: () -> Unit,
+    onSearch: (String) -> Unit,
     isSearch: Boolean,
     modifier: Modifier = Modifier,
     categoryName: String? = null,
@@ -128,7 +131,7 @@ fun CustomSearchBox(
         SearchBox(
             modifier = modifier,
             onSearch = {
-                onSearch()
+                onSearch(it)
             },
             isSearch = isSearch,
             categoryName = categoryName,
@@ -305,11 +308,11 @@ private fun DialogItem(
 @Composable
 private fun SearchBox(
     modifier: Modifier = Modifier,
-    onSearch: () -> Unit,
+    onSearch: (String) -> Unit,
     isSearch: Boolean,
     categoryName: String? = null,
     onValueChange: (String) -> Unit,
-    value: String
+    value: String,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
@@ -342,6 +345,12 @@ private fun SearchBox(
                 }
 
             },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = { onSearch(value) }
+            ),
             maxLines = 1,
             colors = TextFieldDefaults.colors(
                 unfocusedIndicatorColor = Color.Transparent,
@@ -349,6 +358,7 @@ private fun SearchBox(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
             ),
+
             placeholder = {
                 Text("도시, 명소, 숙소명으로 찾아보세요", overflow = TextOverflow.Ellipsis)
             },
@@ -357,7 +367,7 @@ private fun SearchBox(
                     isSearch,
                     onClick = {
                         if (isSearch) {
-                            onSearch()
+                            onSearch(value)
                         }
                     }
                 ),
