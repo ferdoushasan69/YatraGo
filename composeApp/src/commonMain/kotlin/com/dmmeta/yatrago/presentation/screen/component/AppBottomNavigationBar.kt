@@ -50,7 +50,7 @@ fun AppBottomNavigationBar(
             label = "검색",
             selectedIcon = painterResource(Res.drawable.search),
             unSelectedIcon = painterResource(Res.drawable.search),
-            route = Screen.Search::class.qualifiedName!!
+            route = Screen.SearchFilter::class.qualifiedName!!
         ),
         BottomNavItem(
             label = "내주변",

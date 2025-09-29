@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -27,7 +28,8 @@ fun CustomOutlineButton(
     buttonText: String,
     textColor: Color = Color.Unspecified,
     iconTint: Color = Color.Unspecified,
-    onClick : ()-> Unit
+    onClick : ()-> Unit,
+    textStyle: TextStyle =  MaterialTheme.typography.titleLarge
 ) {
     Box(
         modifier = modifier.border(
@@ -49,7 +51,7 @@ fun CustomOutlineButton(
                 modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(4.dp))
-            Text(text = buttonText, style = MaterialTheme.typography.titleLarge, color = textColor)
+            Text(text = buttonText, style =textStyle, color = textColor)
         }
     }
 }

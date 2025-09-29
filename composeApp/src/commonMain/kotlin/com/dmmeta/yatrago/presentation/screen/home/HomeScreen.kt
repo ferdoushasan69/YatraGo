@@ -94,7 +94,7 @@ fun HomeScreen(navController: NavHostController) {
             navController.navigate(Screen.Map)
         },
         onClick = {
-            navController.navigate(Screen.CategorySelection)
+            navController.navigate(Screen.Search(""))
         }
     )
 }

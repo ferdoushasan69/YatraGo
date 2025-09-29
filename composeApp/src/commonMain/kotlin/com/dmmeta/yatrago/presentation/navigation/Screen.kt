@@ -17,8 +17,10 @@ sealed class Screen {
     object ViewAllBanner : Screen()
 
     @Serializable
-    object Search : Screen()
+    data class Search(val query: String = "") : Screen()
 
+    @Serializable
+    data object SearchFilter : Screen()
     @Serializable
     object Map : Screen()
 
