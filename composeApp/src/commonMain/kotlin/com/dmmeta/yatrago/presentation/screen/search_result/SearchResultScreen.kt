@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,14 +25,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -52,6 +56,9 @@ import androidx.navigation.NavHostController
 import com.dmmeta.yatrago.presentation.navigation.Screen
 import com.dmmeta.yatrago.presentation.screen.component.AccommodationListCard
 import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
+import com.dmmeta.yatrago.presentation.screen.component.PrimaryButton
+import com.dmmeta.yatrago.presentation.screen.component.RangeSeekBar
+import com.dmmeta.yatrago.utils.wideBreakPoint
 import org.jetbrains.compose.resources.painterResource
 import yatrago.composeapp.generated.resources.Res
 import yatrago.composeapp.generated.resources.calender_date_picker
@@ -59,6 +66,7 @@ import yatrago.composeapp.generated.resources.ic_back
 import yatrago.composeapp.generated.resources.ic_check
 import yatrago.composeapp.generated.resources.ic_filter
 import yatrago.composeapp.generated.resources.ic_home
+import yatrago.composeapp.generated.resources.ic_info
 import yatrago.composeapp.generated.resources.ic_search_close
 import yatrago.composeapp.generated.resources.ic_swap
 
@@ -89,9 +97,18 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
         "해외투어티켓",
         "항공"
     )
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showFilterBottomSheet by remember { mutableStateOf(false) }
+    var showSortBottomSheet by remember { mutableStateOf(false) }
 
+    if (showSortBottomSheet) {
+        SortBottomSheet(
+            onDismiss = {
+                showSortBottomSheet = false
+            },
+            sheetState = sheetState
+        )
+    }
     if (showFilterBottomSheet) {
         FilterBottomSheet(
             onDismissRequest = {
@@ -160,7 +177,9 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
                 modifier = Modifier,
                 painter = painterResource(Res.drawable.ic_swap),
                 buttonText = "정렬",
-                onClick = {},
+                onClick = {
+                    showSortBottomSheet = true
+                },
                 textStyle = MaterialTheme.typography.titleSmall,
                 iconTint = MaterialTheme.colorScheme.onBackground
             )
@@ -193,6 +212,82 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun SortBottomSheet(
+    onDismiss: () -> Unit,
+    sheetState: SheetState
+) {
+    val list = listOf(
+        "추천순",
+        "가격 낮은 순",
+        "가격 높은 순"
+    )
+    var selected by remember { mutableStateOf(-1) }
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+    ) {
+        Column(
+            Modifier.fillMaxWidth().padding(horizontal = 8.dp).navigationBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Text(
+                "정렬",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            list.forEachIndexed { index, string ->
+                SortSheetItem(
+                    text = string,
+                    onClick = {
+                        selected = if (it) index else -1
+                    },
+                    selected = index == selected
+                )
+            }
+
+        }
+    }
+}
+
+@Composable
+fun SortSheetItem(text: String, onClick: (Boolean) -> Unit, selected: Boolean) {
+    Row(
+        modifier = Modifier.padding(8.dp).fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(
+                if (selected) MaterialTheme.colorScheme.outlineVariant.copy(.5f)
+                else Color.Transparent, shape = RoundedCornerShape(8.dp)
+            )
+
+            .clickable {
+                onClick(!selected)
+            }
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row (verticalAlignment = Alignment.CenterVertically){
+            Text(text = text, style = MaterialTheme.typography.titleMedium)
+            Spacer(Modifier.width(3.dp))
+            if (selected){
+                Icon(painterResource(Res.drawable.ic_info),
+                    modifier = Modifier.size(15.dp),
+                    contentDescription = null)
+            }
+        }
+        if (selected) {
+            Icon(
+                painterResource(Res.drawable.ic_check),
+                modifier = Modifier.size(24.dp),
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun FilterBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
@@ -217,9 +312,61 @@ private fun FilterBottomSheet(
 
                 FilterItem()
                 HorizontalDivider(
-                    modifier = Modifier,
+                    modifier = Modifier.padding(vertical = 16.dp),
                     color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)
                 )
+
+                val rangeState = remember { mutableStateOf(20f..80f) }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("가격 범위", style = MaterialTheme.typography.titleSmall)
+                    Text("정액 2.0명 0.1억 기준", style = MaterialTheme.typography.titleSmall)
+                }
+                RangeSeekBar(
+                    value = rangeState.value,
+                    onValueChange = { rangeState.value = it },
+                    valueRange = 0f..100f,
+                    steps = 1,
+                    showValueLabels = true,
+                    valueFormatter = { v -> "${'$'}{v.toInt()}" }
+                )
+
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    CustomOutlineButtonMinMax(
+                        minOrMax = "최소",
+                        onClick = {},
+                        modifier = Modifier.weight(1f),
+                        value = "${rangeState.value}"
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    CustomOutlineButtonMinMax(
+                        minOrMax = "최대",
+                        onClick = {},
+                        modifier = Modifier.weight(1f),
+                        value = "${rangeState.value}"
+                    )
+                }
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+
+                    PrimaryButton(
+                        modifier = Modifier,
+                        text = "초기화",
+                        onClick = {},
+                        containerColor = MaterialTheme.colorScheme.outlineVariant.copy(.2f),
+                        contentColor = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    PrimaryButton(
+                        modifier = Modifier.weight(1f),
+                        text = "적용하기",
+                        onClick = {}
+                    )
+                }
+
             }
         }
     )
@@ -253,6 +400,34 @@ private fun FilterItem(modifier: Modifier = Modifier) {
         }
     }
 
+
+}
+
+@Composable
+fun CustomOutlineButtonMinMax(
+    minOrMax: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    value: String
+) {
+
+    Column(
+        modifier = modifier.border(
+            width = 1.dp, shape = RoundedCornerShape(12.dp),
+            color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)
+        )
+            .clip(RoundedCornerShape(12.dp))
+            .clickable {
+                onClick()
+            }
+            .padding(horizontal = 8.dp, vertical = 12.dp)
+    ) {
+        Text(text = minOrMax, style = MaterialTheme.typography.labelSmall)
+        Text(
+            text = value,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+        )
+    }
 }
 
 
