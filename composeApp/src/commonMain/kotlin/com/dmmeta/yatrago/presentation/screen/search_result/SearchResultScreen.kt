@@ -25,17 +25,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -58,7 +55,6 @@ import com.dmmeta.yatrago.presentation.screen.component.AccommodationListCard
 import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
 import com.dmmeta.yatrago.presentation.screen.component.PrimaryButton
 import com.dmmeta.yatrago.presentation.screen.component.RangeSeekBar
-import com.dmmeta.yatrago.utils.wideBreakPoint
 import org.jetbrains.compose.resources.painterResource
 import yatrago.composeapp.generated.resources.Res
 import yatrago.composeapp.generated.resources.calender_date_picker
@@ -106,7 +102,10 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
             onDismiss = {
                 showSortBottomSheet = false
             },
-            sheetState = sheetState
+            sheetState = sheetState,
+            onClick = { itemName ->
+
+            }
         )
     }
     if (showFilterBottomSheet) {
@@ -115,7 +114,10 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
                 showFilterBottomSheet = false
             },
             modifier = Modifier.fillMaxWidth(),
-            sheetState = sheetState
+            sheetState = sheetState,
+            onClick = { itemName ->
+
+            }
         )
     }
     Column(modifier = Modifier.fillMaxSize()) {
@@ -214,7 +216,8 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
 @Composable
 fun SortBottomSheet(
     onDismiss: () -> Unit,
-    sheetState: SheetState
+    sheetState: SheetState,
+    onClick: (String) -> Unit
 ) {
     val list = listOf(
         "추천순",
@@ -241,6 +244,7 @@ fun SortBottomSheet(
                     text = string,
                     onClick = {
                         selected = if (it) index else -1
+                        onClick(string)
                     },
                     selected = index == selected
                 )
@@ -267,13 +271,15 @@ fun SortSheetItem(text: String, onClick: (Boolean) -> Unit, selected: Boolean) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row (verticalAlignment = Alignment.CenterVertically){
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = text, style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.width(3.dp))
-            if (selected){
-                Icon(painterResource(Res.drawable.ic_info),
+            if (selected) {
+                Icon(
+                    painterResource(Res.drawable.ic_info),
                     modifier = Modifier.size(15.dp),
-                    contentDescription = null)
+                    contentDescription = null
+                )
             }
         }
         if (selected) {
@@ -291,7 +297,8 @@ fun SortSheetItem(text: String, onClick: (Boolean) -> Unit, selected: Boolean) {
 private fun FilterBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    sheetState: SheetState
+    sheetState: SheetState,
+    onClick: (String) -> Unit
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -310,7 +317,9 @@ private fun FilterBottomSheet(
                 )
                 Text("자주 찾는 필터", style = MaterialTheme.typography.titleMedium)
 
-                FilterItem()
+                FilterItem(
+                    onClick = onClick
+                )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 16.dp),
                     color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)
@@ -374,7 +383,7 @@ private fun FilterBottomSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FilterItem(modifier: Modifier = Modifier) {
+private fun FilterItem(modifier: Modifier = Modifier, onClick: (String) -> Unit) {
     val list = listOf(
         "예약 가능한 숙소",
         "조식 포함",
@@ -394,6 +403,7 @@ private fun FilterItem(modifier: Modifier = Modifier) {
                 checked = index in selectedItem,
                 onCheckedChange = { isChecked ->
                     selectedItem = if (isChecked) selectedItem + index else selectedItem - index
+                    onClick(string)
                 },
                 modifier = Modifier,
             )
