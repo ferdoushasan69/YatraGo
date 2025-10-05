@@ -5,10 +5,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
+import kotlinx.cinterop.BetaInteropApi
+import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.ObjCAction
 import kotlinx.cinterop.useContents
 import platform.CoreLocation.CLGeocoder
 import platform.CoreLocation.CLLocation
+import platform.CoreLocation.CLLocationCoordinate2D
 import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.CoreLocation.CLLocationManager
 import platform.CoreLocation.CLLocationManagerDelegateProtocol
@@ -125,6 +129,7 @@ actual class MapView(
                 onPermissionGranted?.invoke()
                 manager.requestLocation()
             }
+
             else -> {}
         }
     }
@@ -204,7 +209,6 @@ actual fun PlatformMapView(
         }
     }
     val mapWrapper = remember { MapView(mapView) }
-
     LaunchedEffect(Unit) {
         mapWrapper.requestLocationPermission {
             mapWrapper.getCurrentLocation { location ->
@@ -220,15 +224,23 @@ actual fun PlatformMapView(
         update = { view -> view },
     )
 
-    LaunchedEffect(mapWrapper) {
+    LaunchedEffect(Unit) {
         onMapReady(mapWrapper)
     }
 
-    LaunchedEffect(mapView) {
 
-        val handle = TapHandler { gestureRecognizer ->
-            val point = gestureRecognizer.locationInView(mapView)
-            val coordinate = mapView.convertPoint(point, toCoordinateFromView = mapView)
+    val handle = remember(mapView) {
+        TapHandler(mapView) { coordinate ->
+            val latitude = coordinate.useContents { latitude }
+            val longitude = coordinate.useContents { longitude }
+            mapWrapper.addMapMarker(
+                latitude = latitude,
+                longitude = longitude,
+                title = null
+            )
+            mapWrapper.getLocationName(latitude = latitude, longitude = longitude) {
+                onResult(it)
+            }
 
             mapView.removeAnnotations(mapView.annotations)
 
@@ -241,12 +253,25 @@ actual fun PlatformMapView(
             mapWrapper
         }
     }
+
+    val recognizer = platform.UIKit.UITapGestureRecognizer(
+        target = handle,
+        action = platform.Foundation.NSSelectorFromString("handleTap:")
+    )
+    mapView.addGestureRecognizer(recognizer)
 }
 
-class TapHandler(val onTap: (UIGestureRecognizer) -> Unit) : NSObject() {
+class TapHandler @OptIn(ExperimentalForeignApi::class) constructor(
+    private val mapView: MKMapView,
+    private val onTapCoord: (CValue<CLLocationCoordinate2D>) -> Unit
+) : NSObject() {
 
+    @OptIn(BetaInteropApi::class, ExperimentalForeignApi::class)
+    @ObjCAction
     fun handleTap(gesture: UIGestureRecognizer) {
-        onTap(gesture)
+        val point = gesture.locationInView(mapView)
+        val coord: CValue<CLLocationCoordinate2D> =
+            mapView.convertPoint(point, toCoordinateFromView = mapView)
+        onTapCoord(coord)
     }
 }
-

@@ -564,11 +564,13 @@ private fun CustomSearchBar(
             modifier = Modifier.weight(1f).height(56.dp).clip(RoundedCornerShape(16.dp)),
             onValueChange = onValueChange,
             suffix = {
-                Icon(
-                    painterResource(Res.drawable.ic_search_close),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp).clip(CircleShape).clickable { onClear() }
-                )
+                if (value.isNotEmpty()) {
+                    Icon(
+                        painterResource(Res.drawable.ic_search_close),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp).clip(CircleShape).clickable { onClear() }
+                    )
+                }
             },
             placeholder = { Text("Search here...") },
             singleLine = true,
