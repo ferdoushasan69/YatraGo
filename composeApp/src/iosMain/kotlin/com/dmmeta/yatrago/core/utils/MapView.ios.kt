@@ -2,7 +2,10 @@ package com.dmmeta.yatrago.core.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
 import kotlinx.cinterop.BetaInteropApi
@@ -87,7 +90,7 @@ actual class MapView(
             }
 
             kCLAuthorizationStatusNotDetermined -> {
-                locationManager.requestWhenInUseAuthorization()
+                locationManager.requestWhenInUseAuthorization() // This triggers the popup
             }
 
             else -> {
@@ -202,6 +205,8 @@ actual fun PlatformMapView(
     onMapReady: (MapView) -> Unit,
     onResult: (String?) -> Unit
 ) {
+    var lat by  remember { mutableStateOf(0.0) }
+    var long by  remember { mutableStateOf(0.0) }
     val mapView = remember {
         MKMapView().apply {
             setShowsUserLocation(true)
@@ -212,7 +217,7 @@ actual fun PlatformMapView(
     LaunchedEffect(Unit) {
         mapWrapper.requestLocationPermission {
             mapWrapper.getCurrentLocation { location ->
-                mapWrapper.showCurrentLocation(location.latitude, location.longitude)
+//                mapWrapper.showCurrentLocation(location.latitude, location.longitude)
             }
 
         }
@@ -226,6 +231,12 @@ actual fun PlatformMapView(
 
     LaunchedEffect(Unit) {
         onMapReady(mapWrapper)
+        mapWrapper.getLocationName(latitude = lat, longitude = long) { location ->
+//            mapWrapper.showCurrentLocation(location.latitude, location.longitude)
+            onResult(location)
+            println("IOS get location : $location")
+            println("IOS get location : $lat $long")
+        }
     }
 
 
@@ -240,6 +251,9 @@ actual fun PlatformMapView(
             )
             mapWrapper.getLocationName(latitude = latitude, longitude = longitude) {
                 onResult(it)
+                lat = latitude
+                long = longitude
+                println("IOS get location : $it")
             }
 
             mapView.removeAnnotations(mapView.annotations)

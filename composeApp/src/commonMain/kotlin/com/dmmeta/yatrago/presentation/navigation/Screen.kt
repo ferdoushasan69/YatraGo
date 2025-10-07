@@ -21,8 +21,12 @@ sealed class Screen {
 
     @Serializable
     data object SearchFilter : Screen()
+
     @Serializable
     object Map : Screen()
+
+    @Serializable
+    data class AccommodationDetails(val json : String = "-1") : Screen()
 
     @Serializable
     object RoundMap : Screen()

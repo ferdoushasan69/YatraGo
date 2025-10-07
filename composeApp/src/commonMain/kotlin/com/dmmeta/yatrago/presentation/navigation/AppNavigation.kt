@@ -22,6 +22,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.toRoute
+import com.dmmeta.yatrago.presentation.screen.accommodation_details.AccommodationDetailsScreen
+import com.dmmeta.yatrago.presentation.screen.cart.CartScreen
 import com.dmmeta.yatrago.presentation.screen.category.CategoryScreen
 import com.dmmeta.yatrago.presentation.screen.category_search.CategorySearchScreen
 import com.dmmeta.yatrago.presentation.screen.component.AppBottomNavigationBar
@@ -113,10 +115,13 @@ fun AppNavigation(navController: NavHostController) {
                     KeepAlive { MapScreen(navController) }
                 }
 
+                composable<Screen.AccommodationDetails> {
+                    val args = it.toRoute<Screen.AccommodationDetails>().json
+                    AccommodationDetailsScreen(json = args, navController)
+                }
+
                 composable<Screen.Favorite> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Favorite")
-                    }
+                    CartScreen()
                 }
 
                 composable<Screen.Profile> {

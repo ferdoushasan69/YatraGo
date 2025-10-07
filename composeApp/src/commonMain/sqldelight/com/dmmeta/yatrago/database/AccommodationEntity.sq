@@ -1,0 +1,27 @@
+CREATE TABLE AccommodationEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    location TEXT NOT NULL,
+    discount_price TEXT NOT NULL,
+    total_price TEXT NOT NULL
+);
+
+insert:
+
+INSERT OR REPLACE INTO AccommodationEntity(id,name,location,discount_price,total_price)
+VALUES(?,?,?,?,?);
+
+getAll:
+SELECT * FROM AccommodationEntity;
+
+updateName:
+
+UPDATE AccommodationEntity
+
+SET name =:name
+WHERE id IS :id;
+
+delete:
+
+DELETE FROM AccommodationEntity
+WHERE id IS :id;
