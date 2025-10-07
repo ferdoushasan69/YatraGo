@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -11,6 +12,11 @@ plugins {
 }
 
 kotlin {
+    targets.withType<KotlinNativeTarget>().configureEach {
+        binaries.all {
+            linkerOpts("-lsqlite3")   // <-- this fixes the sqlite3_* undefined symbols
+        }
+    }
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
@@ -63,6 +69,8 @@ kotlin {
             implementation(libs.ktor.client.cio)
             implementation(libs.ktor.client.logging)
 
+            //sqldelight
+            implementation(libs.sqldelight.coroutines)
             //kotlin serialization
             implementation(libs.kotlinx.serialization.json)
 
@@ -73,6 +81,9 @@ kotlin {
 
             //coil
             implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+            implementation(libs.coil.compose.core)
+
 
             //Navigation
             implementation(libs.navigation.compose)
@@ -125,7 +136,7 @@ dependencies {
 sqldelight{
     databases{
         create("PostDatabase"){
-            packageName.set("com.dmmeta.yatrago.database")
+            packageName.set("com.dmmeta.yatrago")
         }
     }
 }

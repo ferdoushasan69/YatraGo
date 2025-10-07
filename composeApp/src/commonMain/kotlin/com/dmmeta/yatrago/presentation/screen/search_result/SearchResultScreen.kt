@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,10 +52,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.dmmeta.yatrago.presentation.navigation.Screen
+import com.dmmeta.yatrago.presentation.screen.accommodation_details.accommodationList
 import com.dmmeta.yatrago.presentation.screen.component.AccommodationListCard
 import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
 import com.dmmeta.yatrago.presentation.screen.component.PrimaryButton
 import com.dmmeta.yatrago.presentation.screen.component.RangeSeekBar
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import yatrago.composeapp.generated.resources.Res
 import yatrago.composeapp.generated.resources.calender_date_picker
@@ -76,13 +79,20 @@ fun SearchResultScreen(navHostController: NavHostController, query: String) {
         query = query,
         goHome = {
             navHostController.navigate(Screen.Home)
+        },
+        onClick = {
+            navHostController.navigate(Screen.AccommodationDetails(it))
         }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
+fun SearchContent(
+    onBack: () -> Unit, query: String,
+    goHome: () -> Unit,
+    onClick: (String) -> Unit
+) {
     var textValue by remember { mutableStateOf(query) }
     var selected by remember { mutableStateOf(0) }
     val categories = listOf(
@@ -195,12 +205,19 @@ fun SearchContent(onBack: () -> Unit, query: String, goHome: () -> Unit) {
             CustomFutureBadgeButton(text = "무료취소", onClick = {})
             CustomFutureBadgeButton(text = "예약가능", onClick = {})
         }
-        val count by remember { mutableStateOf(5) }
+        val items = accommodationList()
+        val count = items.size
         LazyColumn {
-            items(count) {
-                AccommodationListCard()
+            items(items) {
+                val hotel = Json.encodeToString(it)
+                AccommodationListCard(
+                    onClick = {
+                        onClick(hotel)
+                    },
+                    hotel = it
+                )
 
-                if (count != it + 1) {
+                if (count > 1 || count  == items.size -1) {
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = 18.dp),
                         color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)

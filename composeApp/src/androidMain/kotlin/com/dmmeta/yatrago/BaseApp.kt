@@ -10,6 +10,7 @@ class BaseApp : Application() {
 
         initKoin {
             androidContext(this@BaseApp)
+            printLogger()
         }
     }
 }

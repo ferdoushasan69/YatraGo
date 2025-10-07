@@ -115,6 +115,8 @@ actual class MapView(
             onResult(null)
         }
     }
+
+
 }
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
@@ -135,7 +137,7 @@ actual fun PlatformMapView(
     ) { isGranted ->
         if (isGranted) {
             mapWrapper?.getCurrentLocation { location ->
-                mapWrapper?.showCurrentLocation(location.latitude, location.longitude)
+//                mapWrapper?.showCurrentLocation(location.latitude, location.longitude)
             }
         }
     }
@@ -144,8 +146,10 @@ actual fun PlatformMapView(
         val observer = LifecycleEventObserver { _, event ->
             mapView?.let { view ->
                 when (event) {
+                    Lifecycle.Event.ON_START -> view.onStart()
                     Lifecycle.Event.ON_RESUME -> view.onResume()
                     Lifecycle.Event.ON_PAUSE -> view.onPause()
+                    Lifecycle.Event.ON_STOP -> view.onStop()
                     Lifecycle.Event.ON_DESTROY -> view.onDestroy()
                     else -> {}
                 }
@@ -155,6 +159,7 @@ actual fun PlatformMapView(
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            mapView?.onDestroy()
         }
     }
 
@@ -189,7 +194,7 @@ actual fun PlatformMapView(
                         permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                     } else {
                         wrapper.getCurrentLocation { location ->
-                            wrapper.showCurrentLocation(location.latitude, location.longitude)
+//                            wrapper.showCurrentLocation(location.latitude, location.longitude)
                         }
                     }
                     googleMap.setOnMapClickListener { latLng ->
