@@ -24,6 +24,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,16 +67,6 @@ import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
 import com.dmmeta.yatrago.presentation.screen.component.PrimaryButton
 import com.dmmeta.yatrago.presentation.screen.component.RangeSeekBar
 import kotlinx.serialization.json.Json
-import org.jetbrains.compose.resources.painterResource
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.calender_date_picker
-import yatrago.composeapp.generated.resources.ic_back
-import yatrago.composeapp.generated.resources.ic_check
-import yatrago.composeapp.generated.resources.ic_filter
-import yatrago.composeapp.generated.resources.ic_home
-import yatrago.composeapp.generated.resources.ic_info
-import yatrago.composeapp.generated.resources.ic_search_close
-import yatrago.composeapp.generated.resources.ic_swap
 
 
 @Composable
@@ -164,17 +163,16 @@ fun SearchContent(
         ) {
             CustomOutlineButton(
                 modifier = Modifier.weight(1f),
-                painter = painterResource(Res.drawable.calender_date_picker),
                 buttonText = "09.17~09.18 · 객실 1, 2명",
                 onClick = {},
                 textStyle = MaterialTheme.typography.titleSmall,
-                iconTint = MaterialTheme.colorScheme.onBackground
-
+                iconTint = MaterialTheme.colorScheme.onBackground,
+                imageVector = Icons.Default.EditCalendar,
             )
             Spacer(Modifier.width(8.dp))
             CustomOutlineButton(
                 modifier = Modifier,
-                painter = painterResource(Res.drawable.ic_filter),
+                imageVector = Icons.Default.FilterList,
                 buttonText = "필터",
                 onClick = {
                     showFilterBottomSheet = true
@@ -187,13 +185,13 @@ fun SearchContent(
 
             CustomOutlineButton(
                 modifier = Modifier,
-                painter = painterResource(Res.drawable.ic_swap),
                 buttonText = "정렬",
                 onClick = {
                     showSortBottomSheet = true
                 },
                 textStyle = MaterialTheme.typography.titleSmall,
-                iconTint = MaterialTheme.colorScheme.onBackground
+                iconTint = MaterialTheme.colorScheme.onBackground,
+                imageVector = Icons.Default.SwapVert
             )
         }
 
@@ -293,7 +291,7 @@ fun SortSheetItem(text: String, onClick: (Boolean) -> Unit, selected: Boolean) {
             Spacer(Modifier.width(3.dp))
             if (selected) {
                 Icon(
-                    painterResource(Res.drawable.ic_info),
+                    imageVector = Icons.Default.Info,
                     modifier = Modifier.size(15.dp),
                     contentDescription = null
                 )
@@ -301,7 +299,7 @@ fun SortSheetItem(text: String, onClick: (Boolean) -> Unit, selected: Boolean) {
         }
         if (selected) {
             Icon(
-                painterResource(Res.drawable.ic_check),
+                imageVector = Icons.Default.Check,
                 modifier = Modifier.size(24.dp),
                 contentDescription = null
             )
@@ -502,7 +500,7 @@ fun CustomCheckbox(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painterResource(Res.drawable.ic_check),
+                imageVector = Icons.Default.Check,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
@@ -571,7 +569,7 @@ private fun CustomSearchBar(
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onBack) {
             Icon(
-                painterResource(Res.drawable.ic_back),
+                imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = null,
                 Modifier.size(24.dp)
             )
@@ -583,7 +581,7 @@ private fun CustomSearchBar(
             suffix = {
                 if (value.isNotEmpty()) {
                     Icon(
-                        painterResource(Res.drawable.ic_search_close),
+                        imageVector = Icons.Default.Close,
                         contentDescription = null,
                         modifier = Modifier.size(24.dp).clip(CircleShape).clickable { onClear() }
                     )
@@ -601,7 +599,7 @@ private fun CustomSearchBar(
         )
         IconButton(onClick = goHome) {
             Icon(
-                painterResource(Res.drawable.ic_home),
+                imageVector = Icons.Default.Home,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )

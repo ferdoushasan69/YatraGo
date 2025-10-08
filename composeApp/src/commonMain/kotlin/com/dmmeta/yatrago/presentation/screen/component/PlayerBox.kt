@@ -17,6 +17,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,11 +41,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_add
-import yatrago.composeapp.generated.resources.ic_pause
-import yatrago.composeapp.generated.resources.ic_play
-import org.jetbrains.compose.resources.painterResource
 import kotlin.math.roundToInt
 
 @Composable
@@ -98,7 +97,7 @@ fun PlayerBox(
         ) {
             IconButton(onTogglePlay) {
                 Icon(
-                    painter = painterResource(if (playing) Res.drawable.ic_play else Res.drawable.ic_pause),
+                    imageVector = if (playing) Icons.Default.PlayArrow else Icons.Default.Pause,
                     contentDescription = null
                 )
             }
@@ -189,7 +188,7 @@ private fun CustomAddButton(
             modifier = Modifier.padding(horizontal = 8.dp)
         )
         Icon(
-            painterResource(Res.drawable.ic_add),
+            imageVector = Icons.Default.Add,
             contentDescription = null,
             modifier = Modifier.size(16.dp).offset(x = -5.dp)
         )

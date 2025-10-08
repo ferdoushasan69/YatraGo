@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -16,9 +18,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.dmmeta.yatrago.presentation.theme.SearchBarColor
-import org.jetbrains.compose.resources.painterResource
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +47,7 @@ fun CustomSearchBar(
         onValueChange = onValueChange,
         prefix = {
             Icon(
-                painterResource(Res.drawable.search),
+                imageVector = Icons.Default.Search,
                 contentDescription = null,
                 tint = Color.White.copy(.7f),
                 modifier = Modifier.size(26.dp)

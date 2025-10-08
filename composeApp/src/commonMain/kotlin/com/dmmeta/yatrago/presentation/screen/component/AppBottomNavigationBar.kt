@@ -4,10 +4,27 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EditLocationAlt
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.EditLocationAlt
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,26 +32,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dmmeta.yatrago.presentation.navigation.Screen
 import com.dmmeta.yatrago.presentation.theme.PrimaryColor
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_favorite
-import yatrago.composeapp.generated.resources.ic_home
-import yatrago.composeapp.generated.resources.ic_near_by
-import yatrago.composeapp.generated.resources.ic_user
-import yatrago.composeapp.generated.resources.search
-import org.jetbrains.compose.resources.painterResource
 
 data class BottomNavItem(
     val label: String,
-    val selectedIcon: Painter,
-    val unSelectedIcon: Painter,
+    val selectedIcon: ImageVector,
+    val unSelectedIcon: ImageVector,
     val route: String
 )
 
@@ -48,32 +57,32 @@ fun AppBottomNavigationBar(
     val items = listOf(
         BottomNavItem(
             label = "검색",
-            selectedIcon = painterResource(Res.drawable.search),
-            unSelectedIcon = painterResource(Res.drawable.search),
+            selectedIcon = Icons.Filled.Search,
+            unSelectedIcon = Icons.Outlined.Search,
             route = Screen.SearchFilter::class.qualifiedName!!
         ),
         BottomNavItem(
             label = "내주변",
-            selectedIcon = painterResource(Res.drawable.ic_near_by),
-            unSelectedIcon = painterResource(Res.drawable.ic_near_by),
+            selectedIcon = Icons.Filled.EditLocationAlt,
+            unSelectedIcon = Icons.Outlined.EditLocationAlt,
             route = Screen.Map::class.qualifiedName!!
         ),
         BottomNavItem(
             label = "홈",
-            selectedIcon = painterResource(Res.drawable.ic_home),
-            unSelectedIcon = painterResource(Res.drawable.ic_home),
+            selectedIcon = Icons.Filled.Home,
+            unSelectedIcon = Icons.Outlined.Home,
             route = Screen.Home::class.qualifiedName!!
         ),
         BottomNavItem(
             label = "찜",
-            selectedIcon = painterResource(Res.drawable.ic_favorite),
-            unSelectedIcon = painterResource(Res.drawable.ic_favorite),
+            selectedIcon = Icons.Filled.Favorite,
+            unSelectedIcon = Icons.Rounded.FavoriteBorder,
             route = Screen.Favorite::class.qualifiedName!!
         ),
         BottomNavItem(
             label = "마이",
-            selectedIcon = painterResource(Res.drawable.ic_user),
-            unSelectedIcon = painterResource(Res.drawable.ic_user),
+            selectedIcon = Icons.Filled.Person,
+            unSelectedIcon = Icons.Outlined.Person,
             route = Screen.Profile::class.qualifiedName!!
         ),
     )
@@ -136,10 +145,10 @@ fun BottomNavItemView(
     ) {
         Spacer(modifier = Modifier.height(12.dp))
 
-        Image(
-            painter = if (isSelected) item.selectedIcon else item.unSelectedIcon,
+        Icon(
+            imageVector = if (isSelected) item.selectedIcon else item.unSelectedIcon,
             contentDescription = item.label,
-            colorFilter = ColorFilter.tint(contentColor),
+            tint = contentColor,
         )
 
         Spacer(modifier = Modifier.height(4.dp))

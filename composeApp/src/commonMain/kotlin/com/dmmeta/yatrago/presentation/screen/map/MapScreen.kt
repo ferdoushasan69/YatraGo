@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.EditLocation
+import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,11 +37,6 @@ import com.dmmeta.yatrago.presentation.screen.component.CustomLocationItem
 import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.presentation.theme.PrimaryColor
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_back
-import yatrago.composeapp.generated.resources.ic_location
-import yatrago.composeapp.generated.resources.ic_location_info
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MapScreen(navHostController: NavHostController) {
@@ -71,7 +70,7 @@ fun MapContent(onBack: () -> Unit) {
                 modifier = Modifier,
                 navIcon = {
                     IconButton(onClick = { onBack() }) {
-                        Icon(painterResource(Res.drawable.ic_back), contentDescription = null)
+                        Icon(imageVector = Icons.Default.ArrowBackIosNew, contentDescription = null)
                     }
                 },
                 textStyle = MaterialTheme.typography.titleMedium.copy(
@@ -132,7 +131,7 @@ fun MapContent(onBack: () -> Unit) {
             ) {
                 CustomOutlineButton(
                     modifier = Modifier.weight(1f),
-                    painter = painterResource(Res.drawable.ic_location),
+                    imageVector = Icons.Default.LocationCity,
                     buttonText = "업체위치",
                     textColor = PrimaryColor,
                     iconTint = PrimaryColor,
@@ -146,7 +145,7 @@ fun MapContent(onBack: () -> Unit) {
                 CustomOutlineButton(
                     iconTint = PrimaryColor,
                     modifier = Modifier.weight(1f),
-                    painter = painterResource(Res.drawable.ic_location_info),
+                    imageVector = Icons.Default.EditLocation,
                     buttonText = "길안내",
                     textColor = PrimaryColor,
                     onClick = {

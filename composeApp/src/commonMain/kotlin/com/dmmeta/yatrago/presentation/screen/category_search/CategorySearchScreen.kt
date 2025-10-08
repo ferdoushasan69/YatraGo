@@ -18,6 +18,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AirplanemodeActive
+import androidx.compose.material.icons.filled.Apartment
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Attractions
+import androidx.compose.material.icons.filled.MicExternalOn
+import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -35,7 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,15 +52,7 @@ import com.dmmeta.yatrago.presentation.screen.component.CustomSearchBox
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.presentation.screen.component.SearchListTile
 import com.dmmeta.yatrago.presentation.theme.PrimaryColor
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_apertment
-import yatrago.composeapp.generated.resources.ic_back
-import yatrago.composeapp.generated.resources.ic_flight
-import yatrago.composeapp.generated.resources.ic_mic
-import yatrago.composeapp.generated.resources.ic_park
-import yatrago.composeapp.generated.resources.tower
 
 @Composable
 fun CategorySearchScreen(
@@ -77,7 +76,7 @@ fun CategorySearchScreen(
 private fun CategorySearchContent(
     onBack: () -> Unit,
     viewModel: CategorySearchViewModel,
-    onSearch :(String)-> Unit
+    onSearch: (String) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     val locationList = listOf(
@@ -97,11 +96,11 @@ private fun CategorySearchContent(
         focusRequester.requestFocus()
     }
     val categories = listOf(
-        CategoryOption(label = "국내패키지", icon = painterResource(Res.drawable.ic_park)),
-        CategoryOption(label = "공연", icon = painterResource(Res.drawable.ic_mic)),
-        CategoryOption(label = "해외숙소", icon = painterResource(Res.drawable.ic_apertment)),
-        CategoryOption(label = "해외투어", icon = painterResource(Res.drawable.tower)),
-        CategoryOption(label = "항공", icon = painterResource(Res.drawable.ic_flight))
+        CategoryOption(label = "국내패키지", icon = Icons.Default.Attractions),
+        CategoryOption(label = "공연", icon = Icons.Default.MicExternalOn),
+        CategoryOption(label = "해외숙소", icon = Icons.Default.Apartment),
+        CategoryOption(label = "해외투어", icon = Icons.Default.TravelExplore),
+        CategoryOption(label = "항공", icon = Icons.Default.AirplanemodeActive)
     )
     var selectedIndex by remember { mutableStateOf(2) }
     var categoryName by remember { mutableStateOf(categories[selectedIndex].label) }
@@ -119,7 +118,7 @@ private fun CategorySearchContent(
             navIcon = {
                 IconButton(onClick = onBack, modifier = Modifier) {
                     Icon(
-                        painterResource(Res.drawable.ic_back),
+                        imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = null
                     )
                 }
@@ -310,7 +309,7 @@ data class LocationItem(
 )
 
 data class CategoryOption(
-    val icon: Painter,
+    val icon: ImageVector,
     val label: String
 )
 
@@ -318,7 +317,7 @@ data class CategoryOption(
 private fun CategoryItem(
     label: String,
     modifier: Modifier = Modifier,
-    icon: Painter,
+    icon: ImageVector,
     onClick: () -> Unit,
     selected: Boolean
 ) {
@@ -339,7 +338,7 @@ private fun CategoryItem(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = icon,
+                    imageVector = icon,
                     contentDescription = null,
                     modifier = Modifier.size(28.dp),
                     tint = if (selected) Color.White else PrimaryColor

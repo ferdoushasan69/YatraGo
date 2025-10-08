@@ -1,44 +1,24 @@
 package com.dmmeta.yatrago.utils
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.banner_eight
-import yatrago.composeapp.generated.resources.banner_eleven
-import yatrago.composeapp.generated.resources.banner_fifteen
-import yatrago.composeapp.generated.resources.banner_five
-import yatrago.composeapp.generated.resources.banner_four
-import yatrago.composeapp.generated.resources.banner_fourteen
-import yatrago.composeapp.generated.resources.banner_nine
-import yatrago.composeapp.generated.resources.banner_one
-import yatrago.composeapp.generated.resources.banner_seven
-import yatrago.composeapp.generated.resources.banner_six
-import yatrago.composeapp.generated.resources.banner_sixteen
-import yatrago.composeapp.generated.resources.banner_ten
-import yatrago.composeapp.generated.resources.banner_thirteen
-import yatrago.composeapp.generated.resources.banner_three
-import yatrago.composeapp.generated.resources.banner_tweleve
-import yatrago.composeapp.generated.resources.banner_two
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun getBannerList(): List<Painter> {
+fun getBannerList(): List<String> {
     return listOf(
-        painterResource(Res.drawable.banner_one),
-        painterResource(Res.drawable.banner_two),
-        painterResource(Res.drawable.banner_three),
-        painterResource(Res.drawable.banner_four),
-        painterResource(Res.drawable.banner_five),
-        painterResource(Res.drawable.banner_six),
-        painterResource(Res.drawable.banner_seven),
-        painterResource(Res.drawable.banner_eight),
-        painterResource(Res.drawable.banner_nine),
-        painterResource(Res.drawable.banner_ten),
-        painterResource(Res.drawable.banner_eleven),
-        painterResource(Res.drawable.banner_tweleve),
-        painterResource(Res.drawable.banner_thirteen),
-        painterResource(Res.drawable.banner_fourteen),
-        painterResource(Res.drawable.banner_fifteen),
-        painterResource(Res.drawable.banner_sixteen)
+        "https://image6.yanolja.com/cx-ydm/nLngkZfZ8AUOpYa9",
+        "https://image6.yanolja.com/cx-ydm/p0HcjuJwrJ5CgNjj",
+        "https://image6.yanolja.com/cx-ydm/axWGuhGwLOIo3R2w",
+        "https://image6.yanolja.com/cx-ydm/4ykvP2TW2D9y61Zb",
+        "https://image6.yanolja.com/cx-ydm/dXXWr3rPQsVlgYdb",
+        "https://image6.yanolja.com/cx-ydm/fvLYAidhnY3PA8EJ",
+        "https://image6.yanolja.com/cx-ydm/NtIRw61hBQYSc3if",
+        "https://image6.yanolja.com/cx-ydm/maCPVs4AOykbeEsh",
+        "https://image6.yanolja.com/cx-ydm/uC1R3X0GFxoRxgb4",
+        "https://image6.yanolja.com/cx-ydm/KHVakRjZK1GKXsq3",
+        "https://image6.yanolja.com/cx-ydm/B7c9u79sUKaa08yI",
+        "https://image6.yanolja.com/cx-ydm/en8KjMlzGRVtBPKP",
+        "https://image6.yanolja.com/cx-ydm/RFQ8EyBBs6wEGPyX",
+        "https://image6.yanolja.com/cx-ydm/7BBm64PdXJYdm1G6",
+        "https://image6.yanolja.com/cx-ydm/J1Qg4jWWW558AUmJ"
     )
 }

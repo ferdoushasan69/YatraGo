@@ -40,7 +40,12 @@ fun AppNavigation(navController: NavHostController) {
     }
 
     val topBarScreens = remember { setOf(Screen.Home::class.qualifiedName) }
-    val fullScreens = remember { setOf(Screen.Home::class.qualifiedName) }
+    val fullScreens = remember {
+        setOf(
+            Screen.Home::class.qualifiedName,
+            Screen.AccommodationDetails::class.qualifiedName
+        )
+    }
     val bottomScreens = remember {
         setOf(
             Screen.SearchFilter::class.qualifiedName,

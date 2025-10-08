@@ -17,19 +17,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomOutlineButton(
     modifier: Modifier = Modifier,
-    painter: Painter,
+    imageVector: ImageVector,
     buttonText: String,
     textColor: Color = Color.Unspecified,
     iconTint: Color = Color.Unspecified,
-    onClick : ()-> Unit,
-    textStyle: TextStyle =  MaterialTheme.typography.titleLarge
+    onClick: () -> Unit,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge
 ) {
     Box(
         modifier = modifier.border(
@@ -38,20 +38,19 @@ fun CustomOutlineButton(
             shape = RoundedCornerShape(30.dp)
         )
             .clip(RoundedCornerShape(30.dp))
-            .clickable{onClick()}
-            .padding(8.dp)
-        ,
+            .clickable { onClick() }
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painter,
+                imageVector = imageVector,
                 contentDescription = null,
                 tint = iconTint,
                 modifier = Modifier.size(24.dp)
             )
             Spacer(Modifier.width(4.dp))
-            Text(text = buttonText, style =textStyle, color = textColor)
+            Text(text = buttonText, style = textStyle, color = textColor)
         }
     }
 }

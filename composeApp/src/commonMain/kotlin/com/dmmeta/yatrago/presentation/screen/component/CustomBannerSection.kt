@@ -1,6 +1,5 @@
 package com.dmmeta.yatrago.presentation.screen.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.dmmeta.yatrago.utils.getBannerList
 import com.dmmeta.yatrago.utils.wideBreakPoint
 import kotlinx.coroutines.delay
@@ -95,8 +95,8 @@ fun CustomBannerSection(onClick: () -> Unit = {}) {
                 val painters = pageItem[realIndex]
 
                 if (painters.size == 1) {
-                    Image(
-                        painter = painters[0],
+                    AsyncImage(
+                        model = painters[0],
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
@@ -113,8 +113,8 @@ fun CustomBannerSection(onClick: () -> Unit = {}) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painters[0],
+                        AsyncImage(
+                            model = painters[0],
                             contentDescription = null,
                             contentScale = ContentScale.FillBounds,
                             modifier = Modifier.weight(1f).fillMaxHeight()
@@ -123,8 +123,8 @@ fun CustomBannerSection(onClick: () -> Unit = {}) {
                         )
                         Spacer(Modifier.width(8.dp))
                         if (painters.size > 1) {
-                            Image(
-                                painter = painters[1],
+                            AsyncImage(
+                                model = painters[1],
                                 contentDescription = null,
                                 contentScale = ContentScale.FillBounds,
                                 modifier = Modifier.weight(1f).fillMaxHeight()
