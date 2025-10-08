@@ -1,7 +1,7 @@
 package com.dmmeta.yatrago.core.di
 
 import app.cash.sqldelight.db.SqlDriver
-import com.dmmeta.yatrago.PostDatabase
+import com.dmmeta.yatrago.database.AppDatabase
 import com.dmmeta.yatrago.core.platform.DataStoreFactory
 import com.dmmeta.yatrago.data.local.AppDataSource
 import com.dmmeta.yatrago.data.repository.DatabaseRepositoryImpl
@@ -14,6 +14,6 @@ val LocalModule = module {
     single<SqlDriver> { get<DatabaseDriverFactory>().createDriver() }
     single<DatabaseRepository> { DatabaseRepositoryImpl(get()) }
     single { AppDataSource(get()) }
-    single { PostDatabase(get()) }
+    single { AppDatabase(get()) }
 
 }

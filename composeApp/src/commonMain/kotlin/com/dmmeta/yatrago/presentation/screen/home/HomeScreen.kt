@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.dmmeta.yatrago.presentation.navigation.Screen
+import com.dmmeta.yatrago.presentation.screen.accommodation_details.accommodationList
 import com.dmmeta.yatrago.presentation.screen.component.CustomBannerSection
 import com.dmmeta.yatrago.presentation.screen.component.CustomOfferButton
 import com.dmmeta.yatrago.presentation.screen.component.CustomSearchBar
@@ -53,6 +53,9 @@ import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.presentation.screen.component.ProductItem
 import com.dmmeta.yatrago.presentation.theme.TopContentBrush
 import com.dmmeta.yatrago.utils.wideBreakPoint
+import kotlinx.serialization.json.Json
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import yatrago.composeapp.generated.resources.Res
 import yatrago.composeapp.generated.resources.bus_transport
 import yatrago.composeapp.generated.resources.calander
@@ -70,15 +73,11 @@ import yatrago.composeapp.generated.resources.mutel
 import yatrago.composeapp.generated.resources.ocean_old
 import yatrago.composeapp.generated.resources.pention
 import yatrago.composeapp.generated.resources.plan
-import yatrago.composeapp.generated.resources.rahan_hotel
 import yatrago.composeapp.generated.resources.speed_bus
 import yatrago.composeapp.generated.resources.tower
 import yatrago.composeapp.generated.resources.train
 import yatrago.composeapp.generated.resources.travel
 import yatrago.composeapp.generated.resources.welcome_kit
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable
@@ -91,10 +90,10 @@ fun HomeScreen(navController: NavHostController) {
             navController.navigate(Screen.ViewAllBanner)
         },
         onProductClick = {
-            navController.navigate(Screen.Map)
+            navController.navigate(Screen.AccommodationDetails(it))
         },
         onClick = {
-            navController.navigate(Screen.Search(""))
+            navController.navigate(Screen.SearchFilter)
         }
     )
 }
@@ -103,7 +102,7 @@ fun HomeScreen(navController: NavHostController) {
 fun HomeContent(
     onCategoryItemClick: (String) -> Unit,
     onBannerAddClick: () -> Unit,
-    onProductClick: () -> Unit,
+    onProductClick: (String) -> Unit,
     onClick: () -> Unit
 ) {
     Column(
@@ -126,20 +125,9 @@ fun HomeContent(
 }
 
 @Composable
-fun ProductItemSection(onClick: () -> Unit) {
+fun ProductItemSection(onClick: (String) -> Unit) {
 
-    val products = listOf(
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-        Product(name = "포항 에이원호텔 해도포항 에이원호텔 해도", img = painterResource(Res.drawable.rahan_hotel)),
-    )
+    val products = accommodationList()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -155,9 +143,11 @@ fun ProductItemSection(onClick: () -> Unit) {
             items(products) { product ->
                 ProductItem(
                     modifier = Modifier.padding(8.dp),
-                    productName = product.name,
-                    productImage = product.img,
-                    onClick = onClick
+                    accommodation = product,
+                    onClick = {
+                        val json = Json.encodeToString(product)
+                        onClick(json)
+                    }
                 )
             }
         }

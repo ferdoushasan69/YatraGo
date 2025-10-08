@@ -214,10 +214,10 @@ fun SearchContent(
                     onClick = {
                         onClick(hotel)
                     },
-                    hotel = it
+                    accommodation = it
                 )
 
-                if (count > 1 || count  == items.size -1) {
+                if (count > 1 || count == items.size - 1) {
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = 18.dp),
                         color = MaterialTheme.colorScheme.outlineVariant.copy(.3f)

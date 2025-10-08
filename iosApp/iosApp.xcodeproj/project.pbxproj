@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0C42B79E2E961E1B001536C7 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C42B79D2E961E1B001536C7 /* libsqlite3.tbd */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		0C42B79D2E961E1B001536C7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		12F2FD30F72FA69768E8F886 /* YatraGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YatraGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -41,12 +46,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C42B79E2E961E1B001536C7 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C42B79C2E961E1B001536C7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0C42B79D2E961E1B001536C7 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7ED269085F945C7B974F8008 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -60,6 +74,7 @@
 			children = (
 				DB986ED4CEFE5031A087FFF8 /* Configuration */,
 				27FD37F0C330513A4F39F75E /* iosApp */,
+				0C42B79C2E961E1B001536C7 /* Frameworks */,
 				7ED269085F945C7B974F8008 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -312,6 +327,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"-",
 				);
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -341,6 +357,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"-",
 				);
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

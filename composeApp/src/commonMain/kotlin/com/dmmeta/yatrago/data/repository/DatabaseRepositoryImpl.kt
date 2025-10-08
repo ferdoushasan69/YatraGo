@@ -12,9 +12,17 @@ class DatabaseRepositoryImpl(
         appDataSource.insert(
             id = accommodation.id,
             name = accommodation.name,
-            location = accommodation.location,
-            discount_price = accommodation.discountPrice,
-            total_price = accommodation.totalPrice
+            stars = accommodation.stars.toLong(),
+            address = accommodation.address,
+            cityLine = accommodation.cityLine,
+            photoUrl = accommodation.photoUrl,
+            description = accommodation.description,
+            facilities = accommodation.facilities,
+            mainPolicy = accommodation.mainPolicy,
+            importantInfo = accommodation.importantInfo,
+            sellerName = accommodation.sellerName,
+            priceKrw = accommodation.priceKrw,
+            discount = accommodation.discount
         )
     }
 

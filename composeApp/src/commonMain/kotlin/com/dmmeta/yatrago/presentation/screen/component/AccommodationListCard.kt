@@ -28,21 +28,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.compose.SubcomposeAsyncImage
-import com.dmmeta.yatrago.presentation.screen.accommodation_details.Hotel
+import com.dmmeta.yatrago.domain.model.Accommodation
 import org.jetbrains.compose.resources.painterResource
 import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.hotel_one
 import yatrago.composeapp.generated.resources.ic_location
 
 
 @Composable
-fun AccommodationListCard(modifier: Modifier = Modifier, onClick: () -> Unit, hotel: Hotel) {
+fun AccommodationListCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    accommodation: Accommodation
+) {
     Row(modifier = modifier.fillMaxWidth().height(210.dp).padding(16.dp).clickable {
         onClick()
     }) {
         AsyncImage(
-            model = hotel.photoUrl,
+            model = accommodation.photoUrl,
             contentDescription = null,
             modifier = Modifier.width(120.dp).height(180.dp).clip(RoundedCornerShape(17.dp)),
             contentScale = ContentScale.FillBounds
@@ -54,20 +56,20 @@ fun AccommodationListCard(modifier: Modifier = Modifier, onClick: () -> Unit, ho
         ) {
             Column(modifier = Modifier) {
                 Text(
-                    text = "호텔 ・ ${hotel.stars}성급",
+                    text = "호텔 ・ ${accommodation.stars}성급",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onBackground.copy(.5f),
                     modifier = Modifier.padding(start = 4.dp)
                 )
                 Text(
-                    text = hotel.name,
+                    text = accommodation.name,
                     style = MaterialTheme.typography.titleMedium
                         .copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(start = 4.dp)
                 )
 
                 TextItem(
-                    text = hotel.cityLine,
+                    text = accommodation.cityLine,
                     painter = painterResource(Res.drawable.ic_location),
                 )
             }
@@ -76,10 +78,10 @@ fun AccommodationListCard(modifier: Modifier = Modifier, onClick: () -> Unit, ho
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     Text(text = "10%")
                     Spacer(Modifier.width(4.dp))
-                    Text(text = hotel.discount, textDecoration = TextDecoration.LineThrough)
+                    Text(text = accommodation.discount, textDecoration = TextDecoration.LineThrough)
                 }
                 Text(
-                    text ="${hotel.priceKrw} won",
+                    text = "${accommodation.priceKrw} won",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.outline
