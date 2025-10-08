@@ -1,6 +1,5 @@
 package com.dmmeta.yatrago.presentation.screen.accommodation_details
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -22,13 +22,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -41,7 +41,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
@@ -59,17 +58,8 @@ import com.dmmeta.yatrago.domain.model.Accommodation
 import com.dmmeta.yatrago.presentation.screen.component.CustomLocationItem
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import kotlinx.serialization.json.Json
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_back
-import yatrago.composeapp.generated.resources.ic_bed
-import yatrago.composeapp.generated.resources.ic_favorite
-import yatrago.composeapp.generated.resources.ic_frame
-import yatrago.composeapp.generated.resources.ic_home
-import yatrago.composeapp.generated.resources.ic_location
-import yatrago.composeapp.generated.resources.ic_share
 
 
 @Composable
@@ -135,6 +125,7 @@ fun AccommodationContent(
                 contentScale = ContentScale.FillBounds
             )
             CustomTopAppBar(
+                modifier = Modifier.statusBarsPadding().padding(horizontal = 8.dp),
                 navIcon = {
                     IconFit(
                         onClick = onBack, imageVector = Icons.Default.ArrowBackIosNew,
@@ -147,6 +138,7 @@ fun AccommodationContent(
                         imageVector = Icons.Default.Home,
                         modifier = Modifier.background(Color.White.copy(.7f), shape = CircleShape)
                     )
+                    Spacer(Modifier.width(8.dp))
                     IconFit(
                         onClick = {},
                         imageVector = Icons.Default.Share,
@@ -242,35 +234,6 @@ fun AccommodationContent(
 }
 
 
-// ---------- Pieces ----------
-@Composable
-private fun PhotoHeader(url: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
-    ) {
-        Image(
-            painterResource(Res.drawable.ic_bed),
-            contentDescription = "호텔 사진",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )
-        // rounded overlay (optional)
-        Box(
-            Modifier
-                .align(Alignment.BottomEnd)
-                .padding(10.dp)
-                .clip(RoundedCornerShape(999.dp))
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.7f))
-                .padding(horizontal = 10.dp, vertical = 4.dp)
-        ) {
-            Text("사진", fontSize = 12.sp)
-        }
-    }
-}
-
 @Composable
 private fun TitleBlock(
     stars: Int,
@@ -312,7 +275,7 @@ private fun TitleBlock(
         }
         IconFit(
             onClick = addToCart,
-            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.Favorite,
+            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
             isFavorite = isFavorite
         )
     }
@@ -325,13 +288,13 @@ private fun LocationNameBlock(locationName: String) {
             color = MaterialTheme.colorScheme.outlineVariant.copy(.4f),
         )
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = {}, modifier = Modifier.size(24.dp)) {
                 Icon(
-                    painterResource(Res.drawable.ic_location),
+                    imageVector = Icons.Default.LocationOn,
                     modifier = Modifier.size(16.dp),
                     contentDescription = null
                 )
@@ -354,12 +317,13 @@ private fun LocationNameBlock(locationName: String) {
         HorizontalDivider(
             color = MaterialTheme.colorScheme.outlineVariant.copy(.4f),
         )
-
-        Image(
-            painterResource(Res.drawable.ic_frame),
+        Spacer(Modifier.height(16.dp))
+        AsyncImage(
+            model = "https://image6.yanolja.com/cx-ydm/4ZWB2nf5o9R5M3sN",
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth().height(80.dp),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth().height(100.dp)
+                .clip(RoundedCornerShape(16.dp))
         )
     }
 
@@ -529,19 +493,6 @@ fun accommodationList(): List<Accommodation> {
     }
 }
 
-
-@Composable
-fun AccommodationDetails() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column {
-
-        }
-    }
-}
 
 @Composable
 fun IconFit(

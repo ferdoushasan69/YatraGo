@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,12 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil3.compose.AsyncImage
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.utils.getBannerList
 import com.dmmeta.yatrago.utils.wideBreakPoint
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_back
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BannerListScreen(navHostController: NavHostController) {
@@ -37,7 +37,7 @@ fun BannerListScreen(navHostController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BannerListContent(onBack : ()-> Unit) {
+fun BannerListContent(onBack: () -> Unit) {
     val bannerList = getBannerList()
 
     Column(
@@ -50,7 +50,7 @@ fun BannerListContent(onBack : ()-> Unit) {
             modifier = Modifier.fillMaxWidth(),
             navIcon = {
                 IconButton(onClick = onBack) {
-                    Icon(painter = painterResource(Res.drawable.ic_back), contentDescription = null)
+                    Icon(imageVector = Icons.Default.ArrowBackIosNew, contentDescription = null)
                 }
             }
         )
@@ -61,12 +61,12 @@ fun BannerListContent(onBack : ()-> Unit) {
                 columns = GridCells.Fixed(itemPerPage),
             ) {
                 items(bannerList) {
-                    Image(
-                        painter = it,
+                    AsyncImage(
+                        model = it,
                         contentDescription = null,
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier.fillMaxWidth()
-                            .height(150.dp)
+                            .height(160.dp)
                             .padding(
                                 vertical = 8.dp,
                                 horizontal = if (maxWidth >= wideBreakPoint) 8.dp else 0.dp

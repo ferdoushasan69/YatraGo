@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,11 +26,6 @@ import com.dmmeta.yatrago.presentation.navigation.Screen
 import com.dmmeta.yatrago.presentation.screen.component.CustomBannerSection
 import com.dmmeta.yatrago.presentation.screen.component.CustomSearchBox
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
-import yatrago.composeapp.generated.resources.Res
-import org.jetbrains.compose.resources.painterResource
-import yatrago.composeapp.generated.resources.ic_back
-import yatrago.composeapp.generated.resources.ic_cart
-import yatrago.composeapp.generated.resources.search
 
 @Composable
 fun CategoryScreen(
@@ -72,7 +71,7 @@ fun CategoryContent(
             navIcon = {
                 IconButton(onClick = onBack) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_back),
+                        imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = null,
                         modifier = Modifier.size(24.dp)
                     )
@@ -82,14 +81,14 @@ fun CategoryContent(
                 Row(modifier = Modifier.padding(end = 8.dp)) {
                     IconButton(onClick = onSearch) {
                         Icon(
-                            painter = painterResource(Res.drawable.search),
+                            imageVector = Icons.Default.Search,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_cart),
+                            imageVector = Icons.Default.ShoppingCart,
                             contentDescription = null,
                             modifier = Modifier.size(24.dp)
                         )

@@ -1,6 +1,5 @@
 package com.dmmeta.yatrago.presentation.screen.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,9 +30,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.dmmeta.yatrago.domain.model.Accommodation
-import org.jetbrains.compose.resources.painterResource
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.ic_location
 
 
 @Composable
@@ -70,7 +68,7 @@ fun AccommodationListCard(
 
                 TextItem(
                     text = accommodation.cityLine,
-                    painter = painterResource(Res.drawable.ic_location),
+                    imageVector = Icons.Default.LocationOn,
                 )
             }
 
@@ -95,10 +93,10 @@ fun AccommodationListCard(
 }
 
 @Composable
-private fun TextItem(text: String, painter: Painter) {
+private fun TextItem(text: String, imageVector: ImageVector) {
     Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = {}, modifier = Modifier.size(24.dp)) {
-            Icon(painter = painter, contentDescription = null, Modifier.size(12.dp))
+            Icon(imageVector = imageVector, contentDescription = null, Modifier.size(12.dp))
 
         }
         Spacer(Modifier.width(4.dp))

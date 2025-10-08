@@ -16,12 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar(
-    title: String? = "", modifier: Modifier = Modifier,
+    title: String? = "",
+    modifier: Modifier = Modifier,
     navIcon: @Composable (() -> Unit)? = null,
     topBarAction: @Composable (() -> Unit)? = null,
     isHome: Boolean = false,
     textStyle: TextStyle = TextStyle(),
-    titleColor : Color = MaterialTheme.colorScheme.onBackground
+    titleColor: Color = MaterialTheme.colorScheme.onBackground
 ) {
     TopAppBar(
         windowInsets = WindowInsets(0),

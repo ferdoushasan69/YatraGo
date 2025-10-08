@@ -17,6 +17,13 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -47,14 +54,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.resources.painterResource
-import yatrago.composeapp.generated.resources.Res
-import yatrago.composeapp.generated.resources.calender_date_picker
-import yatrago.composeapp.generated.resources.close
-import yatrago.composeapp.generated.resources.ic_add
-import yatrago.composeapp.generated.resources.ic_remove
-import yatrago.composeapp.generated.resources.ic_user
-import yatrago.composeapp.generated.resources.search
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
@@ -183,7 +182,7 @@ fun DialogContent(
                 onDismiss()
             }) {
                 Icon(
-                    painterResource(Res.drawable.close),
+                    imageVector = Icons.Default.Close,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -289,14 +288,14 @@ private fun DialogItem(
         ) {
             IconButton(onClick = onDecrease) {
                 Icon(
-                    painterResource(Res.drawable.ic_remove),
+                    imageVector = Icons.Default.Remove,
                     contentDescription = null
                 )
             }
             Text(text = countValue, style = MaterialTheme.typography.titleLarge)
             IconButton(onClick = onIncrease) {
                 Icon(
-                    painterResource(Res.drawable.ic_add),
+                    imageVector = Icons.Default.Add,
                     contentDescription = null
                 )
             }
@@ -327,7 +326,7 @@ private fun SearchBox(
             prefix = {
                 Row(modifier = Modifier) {
                     Icon(
-                        painter = painterResource(Res.drawable.search),
+                        imageVector = Icons.Default.Search,
                         contentDescription = null,
                         modifier = Modifier.size(26.dp)
                     )
@@ -394,15 +393,15 @@ fun DateAndCountBox(
     ) {
         DateBoxItem(
             modifier = Modifier,
-            icon = painterResource(Res.drawable.calender_date_picker),
+            icon = Icons.Default.EditCalendar,
             title = pickDate,
             onCLick = {
                 onDatePick()
-            }
+            },
         )
         DateBoxItem(
             modifier = Modifier,
-            icon = painterResource(Res.drawable.ic_user),
+            icon = Icons.Default.Person,
             title = personValue,
             onCLick = {
                 onPersonPick()
@@ -428,7 +427,7 @@ private fun Modifier.showBorder(isLandScape: Boolean): Modifier {
 
 @Composable
 fun DateBoxItem(
-    icon: Painter, title: String,
+    icon: ImageVector, title: String,
     onCLick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
