@@ -1,10 +1,11 @@
 package com.dmmeta.yatrago.db
 
+import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
-import com.dmmeta.yatrago.PostDatabase
+import com.dmmeta.yatrago.database.AppDatabase
 
 actual class DatabaseDriverFactory {
     actual fun createDriver(): SqlDriver =
-        NativeSqliteDriver(PostDatabase.Schema, "post.db")
+        NativeSqliteDriver(AppDatabase.Schema.synchronous(), "post2.db")
 }

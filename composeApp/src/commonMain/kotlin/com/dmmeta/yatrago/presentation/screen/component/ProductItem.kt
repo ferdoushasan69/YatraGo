@@ -1,6 +1,5 @@
 package com.dmmeta.yatrago.presentation.screen.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,20 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.dmmeta.yatrago.domain.model.Accommodation
 
 @Composable
 fun ProductItem(
     modifier: Modifier = Modifier,
-    productName: String, productImage: Painter,
-    onClick :()-> Unit
+    accommodation: Accommodation,
+    onClick: () -> Unit
 ) {
-    Column(modifier = modifier.clickable(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = productImage,
+    Column(
+        modifier = modifier.clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AsyncImage(
+            model = accommodation.photoUrl,
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
@@ -36,7 +39,7 @@ fun ProductItem(
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = productName,
+            text = accommodation.name,
             style = MaterialTheme.typography.titleSmall,
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,

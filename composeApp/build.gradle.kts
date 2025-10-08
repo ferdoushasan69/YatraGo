@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -12,11 +11,6 @@ plugins {
 }
 
 kotlin {
-    targets.withType<KotlinNativeTarget>().configureEach {
-        binaries.all {
-            linkerOpts("-lsqlite3")   // <-- this fixes the sqlite3_* undefined symbols
-        }
-    }
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
@@ -30,7 +24,16 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts("-lsqlite3")
         }
+    }
+    kotlin {
+        targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>()
+            .configureEach {
+                binaries.all {
+                    freeCompilerArgs += "-Xbinary=bundleId=com.dmmeta.yatrago.composeapp"
+                }
+            }
     }
 
     sourceSets {
@@ -61,7 +64,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.coroutines.core)
-
+            implementation(compose.materialIconsExtended)
 
             //ktor client
             implementation(libs.ktor.client.core)
@@ -133,10 +136,12 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
-sqldelight{
-    databases{
-        create("PostDatabase"){
-            packageName.set("com.dmmeta.yatrago")
+sqldelight {
+    databases {
+        create("AppDatabase") {
+            packageName.set("com.dmmeta.yatrago.database")
+            generateAsync.set(true)
         }
+        linkSqlite.set(true)
     }
 }
