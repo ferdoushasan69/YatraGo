@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
+import com.dmmeta.yatrago.presentation.screen.map.SharedMapViewModel
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -202,6 +203,7 @@ actual class MapView(
 @Composable
 actual fun PlatformMapView(
     modifier: Modifier,
+    viewModel: SharedMapViewModel,
     onMapReady: (MapView) -> Unit,
     onResult: (String?) -> Unit
 ) {

@@ -192,38 +192,39 @@ fun AccommodationContent(
         SectionCard(
             "위치 정보",
             content = {
-                PlatformMapView(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(16.dp)
-                        .height(300.dp),
-                    onMapReady = { mapView ->
-                        setMapView = mapView
-                        mapReady = true
-                        mapView.setLocationByName(sample.cityLine) { result ->
-                            locationName = result ?: ""
-                        }
-
-                        mapView.requestLocationPermission {
-                            mapView.getCurrentLocation { location ->
-                                mapView.showCurrentLocation(
-                                    longitude = location.longitude,
-                                    latitude = location.latitude
-                                )
-
-                                mapView.getLocationName(
-                                    latitude = location.latitude,
-                                    longitude = location.longitude,
-                                    onResult = {
-                                        locationName = it ?: ""
-                                    }
-                                )
-                            }
-                        }
-                    },
-                    onResult = {
-                        locationName = it ?: ""
-                    },
-                )
+//                PlatformMapView(
+//                    modifier = Modifier.fillMaxWidth()
+//                        .padding(16.dp)
+//                        .height(300.dp),
+//                    onMapReady = { mapView ->
+//                        setMapView = mapView
+//                        mapReady = true
+//                        mapView.setLocationByName(sample.cityLine) { result ->
+//                            locationName = result ?: ""
+//                        }
+//
+//                        mapView.requestLocationPermission {
+//                            mapView.getCurrentLocation { location ->
+//                                mapView.showCurrentLocation(
+//                                    longitude = location.longitude,
+//                                    latitude = location.latitude
+//                                )
+//
+//                                mapView.getLocationName(
+//                                    latitude = location.latitude,
+//                                    longitude = location.longitude,
+//                                    onResult = {
+//                                        locationName = it ?: ""
+//                                    }
+//                                )
+//                            }
+//                        }
+//                    },
+//                    onResult = {
+//                        locationName = it ?: ""
+//                    },
+//                    viewModel = ,
+//                )
 
 
             },

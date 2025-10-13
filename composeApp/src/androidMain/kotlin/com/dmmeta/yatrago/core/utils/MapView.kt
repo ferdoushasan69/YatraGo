@@ -21,6 +21,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.dmmeta.yatrago.presentation.screen.map.SharedMapViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,7 +33,7 @@ import com.google.android.gms.maps.model.LatLng as AndroidLatLng
 
 actual class MapView(
     private val context: Context,
-    private val googleMap: GoogleMap
+    val googleMap: GoogleMap
 ) {
     private val fusedLocationProviderClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
@@ -123,14 +124,15 @@ actual class MapView(
 @Composable
 actual fun PlatformMapView(
     modifier: Modifier,
+    viewModel: SharedMapViewModel,
     onMapReady: (MapView) -> Unit,
     onResult: (String?) -> Unit
 ) {
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    var mapWrapper by remember { mutableStateOf<MapView?>(viewModel.cachedMapView) }
     var mapView by remember { mutableStateOf<GmsMapView?>(null) }
-    var mapWrapper by remember { mutableStateOf<MapView?>(null) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -165,59 +167,61 @@ actual fun PlatformMapView(
 
     AndroidView(
         factory = { ctx ->
-            GmsMapView(ctx).also { view ->
-                mapView = view
+            val gmsMapView = GmsMapView(ctx)
+            mapView = gmsMapView
+            gmsMapView.onCreate(null)
 
-                view.getMapAsync { googleMap ->
-                    googleMap.apply {
-                        uiSettings.isZoomControlsEnabled = true
-                        uiSettings.isMyLocationButtonEnabled = true
 
-                        if (ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) == PackageManager.PERMISSION_GRANTED
-                        ) {
-                            isMyLocationEnabled = true
-                        }
-                    }
-
-                    val wrapper = MapView(ctx, googleMap = googleMap)
-                    mapWrapper = wrapper
-                    onMapReady(wrapper)
+            gmsMapView.getMapAsync { googleMap ->
+                googleMap.apply {
+                    uiSettings.isZoomControlsEnabled = true
+                    uiSettings.isMyLocationButtonEnabled = true
 
                     if (ContextCompat.checkSelfPermission(
                             context,
                             Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
+                        ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                    } else {
-                        wrapper.getCurrentLocation { location ->
-//                            wrapper.showCurrentLocation(location.latitude, location.longitude)
-                        }
-                    }
-                    googleMap.setOnMapClickListener { latLng ->
-                        googleMap.clear()
-                        googleMap.addMarker(
-                            MarkerOptions()
-                                .position(latLng)
-                                .title("Selected Location")
-                        )
-                        googleMap.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(latLng, 15f)
-                        )
-                        wrapper.getLocationName(
-                            latitude = latLng.latitude,
-                            longitude = latLng.longitude,
-                            onResult = { locationName ->
-                                Log.d("LocationName", "PlatformMapView: $locationName")
-                                onResult(locationName)
-                            })
+                        isMyLocationEnabled = true
                     }
                 }
-                view.onCreate(null)
+
+                val wrapper =
+                    mapWrapper ?: MapView(ctx, googleMap = googleMap).also { mapWrapper = it }
+                mapWrapper = wrapper
+                onMapReady(wrapper)
+
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                } else {
+                    wrapper.getCurrentLocation { location ->
+//                            wrapper.showCurrentLocation(location.latitude, location.longitude)
+                    }
+                }
+                googleMap.setOnMapClickListener { latLng ->
+                    googleMap.clear()
+                    googleMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title("Selected Location")
+                    )
+                    googleMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(latLng, 15f)
+                    )
+                    wrapper.getLocationName(
+                        latitude = latLng.latitude,
+                        longitude = latLng.longitude,
+                        onResult = { locationName ->
+                            Log.d("LocationName", "PlatformMapView: $locationName")
+                            onResult(locationName)
+                        })
+                }
             }
+            gmsMapView
         },
         modifier = modifier,
         update = { view ->

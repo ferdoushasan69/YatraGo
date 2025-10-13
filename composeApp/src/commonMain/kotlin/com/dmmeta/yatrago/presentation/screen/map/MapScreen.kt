@@ -37,21 +37,23 @@ import com.dmmeta.yatrago.presentation.screen.component.CustomLocationItem
 import com.dmmeta.yatrago.presentation.screen.component.CustomOutlineButton
 import com.dmmeta.yatrago.presentation.screen.component.CustomTopAppBar
 import com.dmmeta.yatrago.presentation.theme.PrimaryColor
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MapScreen(navHostController: NavHostController) {
+fun MapScreen(navHostController: NavHostController,viewModel: SharedMapViewModel= koinViewModel()) {
 
     MapContent(
         onBack = {
             navHostController.navigateUp()
         },
+        viewModel
     )
 
 
 }
 
 @Composable
-fun MapContent(onBack: () -> Unit) {
+fun MapContent(onBack: () -> Unit,viewModel: SharedMapViewModel) {
     var mapWeightTarget by remember { mutableStateOf(1f) }
     var locationName by remember { mutableStateOf("") }
     var setMapView: MapView? by remember { mutableStateOf(null) }
@@ -108,6 +110,7 @@ fun MapContent(onBack: () -> Unit) {
                 onResult = {
                     locationName = it ?: ""
                 },
+                viewModel = viewModel,
             )
             if (!mapReady) {
                 Box(
