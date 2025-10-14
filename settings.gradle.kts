@@ -1,4 +1,4 @@
-rootProject.name = "YatraGo"
+rootProject.name = "Choloja"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

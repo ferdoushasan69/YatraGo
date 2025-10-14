@@ -1,8 +1,0 @@
-package com.dmmeta.yatrago.core.platform
-
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-
-expect class DataStoreFactory {
-    fun createDataStore(): DataStore<Preferences>
-}

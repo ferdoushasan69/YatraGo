@@ -12,7 +12,7 @@
 
 /* Begin PBXFileReference section */
 		0C42B79D2E961E1B001536C7 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		12F2FD30F72FA69768E8F886 /* YatraGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YatraGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		12F2FD30F72FA69768E8F886 /* Choloja.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Choloja.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -64,7 +64,7 @@
 		7ED269085F945C7B974F8008 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				12F2FD30F72FA69768E8F886 /* YatraGo.app */,
+				12F2FD30F72FA69768E8F886 /* Choloja.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,7 +102,7 @@
 			packageProductDependencies = (
 			);
 			productName = iosApp;
-			productReference = 12F2FD30F72FA69768E8F886 /* YatraGo.app */;
+			productReference = 12F2FD30F72FA69768E8F886 /* Choloja.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

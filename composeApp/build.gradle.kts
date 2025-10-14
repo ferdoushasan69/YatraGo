@@ -91,7 +91,6 @@ kotlin {
             //Navigation
             implementation(libs.navigation.compose)
 
-
             implementation(libs.kotlinx.datetime)
 
             //DataStore
@@ -106,11 +105,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.dmmeta.yatrago"
+    namespace = "com.dmmeta.choloja"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.dmmeta.yatrago"
+        applicationId = "com.dmmeta.choloja"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -139,7 +138,7 @@ dependencies {
 sqldelight {
     databases {
         create("AppDatabase") {
-            packageName.set("com.dmmeta.yatrago.database")
+            packageName.set("com.dmmeta.choloja.database")
             generateAsync.set(true)
         }
         linkSqlite.set(true)
