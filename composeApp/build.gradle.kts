@@ -44,7 +44,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.play.services.location)
             implementation(libs.play.services.maps)
-
+            implementation(libs.androidx.core.splashscreen)
             //sqlDelight
             implementation(libs.android.driver)
 
